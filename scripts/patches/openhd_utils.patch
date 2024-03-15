@@ -31,7 +31,7 @@ index bdb1bcd..2b5dd86 100644
 +            cd ..
 +            cd rtl8852bu
 +            sed -i 's/aarch64\.l/arm64/' Makefile
-+            cd ../../../../
++            cd ../../../../ && ls -a
 +            patch -p1 -i ../scripts/patches/openhd_drm.patch
 +            patch -p1 -i ../scripts/patches/openhd_wifi.patch
          fi

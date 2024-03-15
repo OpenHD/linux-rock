@@ -1,0 +1,158 @@
+diff --git a/lib/utils.sh b/lib/utils.sh
+index bdb1bcd..4e29add 100644
+--- a/lib/utils.sh
++++ b/lib/utils.sh
+@@ -199,6 +199,25 @@ prepare_source() {
+             git reset --hard FETCH_HEAD
+             git clean -ffd
+             git switch --detach $origin/$BSP_BRANCH
++
++	    #openhd-update-wifi-card-drivers
++            cd drivers/net/wireless/
++            rm -Rf rtl8812au
++            rm -Rf rtl88x2bu
++            git clone https://github.com/openhd/rtl8812au/
++            git clone https://github.com/openhd/rtl88x2bu/
++            git clone https://github.com/openhd/rtl88x2bu/ -b initial52-1 rtl8852bu
++            cd rtl8812au
++            sed -i 's/CONFIG_PLATFORM_I386_PC = y/CONFIG_PLATFORM_I386_PC = n/' Makefile || exit 1
++            sed -i 's/CONFIG_PLATFORM_ARM64_RPI = n/CONFIG_PLATFORM_ARM64_RPI = y/' Makefile || exit 1
++            cd ..
++            cd rtl88x2bu
++            sed -i 's/CONFIG_PLATFORM_I386_PC = y/CONFIG_PLATFORM_I386_PC = n/' Makefile || exit 1
++            sed -i 's/CONFIG_PLATFORM_ARM64_RPI = n/CONFIG_PLATFORM_ARM64_RPI = y/' Makefile || exit 1
++            cd ..
++            cd rtl8852bu
++            sed -e 's/aarch64\.l/arm64/'
++            cd ../../../../
+         fi
+ 
+         if $LONG_VERSION
+diff --git a/linux/rk356x/0100-vendor/0014-OpenHD-DRM.patch b/linux/rk356x/0100-vendor/0014-OpenHD-DRM.patch
+new file mode 100644
+index 0000000..6753adb
+--- /dev/null
++++ b/linux/rk356x/0100-vendor/0014-OpenHD-DRM.patch
+@@ -0,0 +1,81 @@
++commit d63d3764aa9d4ccb62d64c5c1d3ee0118d23bf09
++Author: Raphael Scholle <raphael@openhdfpv.org>
++Date:   Fri Mar 15 19:20:58 2024 +0100
++
++    add openhd DRM patches
++
++diff --git a/drivers/gpu/drm/drm_atomic_helper.c b/drivers/gpu/drm/drm_atomic_helper.c
++index 4108c7265..fd99aac79 100644
++--- a/drivers/gpu/drm/drm_atomic_helper.c
+++++ b/drivers/gpu/drm/drm_atomic_helper.c
++@@ -2937,7 +2937,7 @@ int drm_atomic_helper_update_plane(struct drm_plane *plane,
++ 	if (plane == crtc->cursor)
++ 		state->legacy_cursor_update = true;
++ 
++-	ret = drm_atomic_commit(state);
+++	ret = drm_atomic_nonblocking_commit(state);
++ fail:
++ 	drm_atomic_state_put(state);
++ 	return ret;
++diff --git a/drivers/gpu/drm/rockchip/rockchip_vop2_reg.c b/drivers/gpu/drm/rockchip/rockchip_vop2_reg.c
++index 31069d9ae..b888d41bd 100644
++--- a/drivers/gpu/drm/rockchip/rockchip_vop2_reg.c
+++++ b/drivers/gpu/drm/rockchip/rockchip_vop2_reg.c
++@@ -2388,7 +2388,7 @@ static const struct vop2_win_data rk3528_vop_win_data[] = {
++ 	  .regs = &rk3568_esmart_win_data,
++ 	  .area = rk3568_area_data,
++ 	  .area_size = ARRAY_SIZE(rk3568_area_data),
++-	  .type = DRM_PLANE_TYPE_OVERLAY,
+++	  .type = DRM_PLANE_TYPE_PRIMARY,
++ 	  .axi_id = 0,
++ 	  .axi_yrgb_id = 0x08,
++ 	  .axi_uv_id = 0x09,
++@@ -2652,8 +2652,8 @@ static const struct vop2_win_data rk3568_vop_win_data[] = {
++ 	  .name = "Smart0-win0",
++ 	  .phys_id = ROCKCHIP_VOP2_SMART0,
++ 	  .base = 0x400,
++-	  .formats = formats_for_smart,
++-	  .nformats = ARRAY_SIZE(formats_for_smart),
+++	  .formats = formats_for_rk356x_esmart,
+++	  .nformats = ARRAY_SIZE(formats_for_rk356x_esmart),
++ 	  .format_modifiers = format_modifiers,
++ 	  .layer_sel_id = { 3, 3, 3, 0xff },
++ 	  .supported_rotations = DRM_MODE_REFLECT_Y,
++@@ -2664,7 +2664,7 @@ static const struct vop2_win_data rk3568_vop_win_data[] = {
++ 	  .regs = &rk3568_esmart_win_data,
++ 	  .area = rk3568_area_data,
++ 	  .area_size = ARRAY_SIZE(rk3568_area_data),
++-	  .type = DRM_PLANE_TYPE_PRIMARY,
+++	  .type = DRM_PLANE_TYPE_OVERLAY,
++ 	  .max_upscale_factor = 8,
++ 	  .max_downscale_factor = 8,
++ 	  .dly = { 20, 47, 41 },
++@@ -2674,8 +2674,8 @@ static const struct vop2_win_data rk3568_vop_win_data[] = {
++ 	{
++ 	  .name = "Smart1-win0",
++ 	  .phys_id = ROCKCHIP_VOP2_SMART1,
++-	  .formats = formats_for_smart,
++-	  .nformats = ARRAY_SIZE(formats_for_smart),
+++	  .formats = formats_for_rk356x_esmart,
+++	  .nformats = ARRAY_SIZE(formats_for_rk356x_esmart),
++ 	  .format_modifiers = format_modifiers,
++ 	  .base = 0x600,
++ 	  .layer_sel_id = { 7, 7, 7, 0xff },
++@@ -2687,7 +2687,7 @@ static const struct vop2_win_data rk3568_vop_win_data[] = {
++ 	  .regs = &rk3568_esmart_win_data,
++ 	  .area = rk3568_area_data,
++ 	  .area_size = ARRAY_SIZE(rk3568_area_data),
++-	  .type = DRM_PLANE_TYPE_PRIMARY,
+++	  .type = DRM_PLANE_TYPE_OVERLAY,
++ 	  .max_upscale_factor = 8,
++ 	  .max_downscale_factor = 8,
++ 	  .dly = { 20, 47, 41 },
++@@ -2733,7 +2733,7 @@ static const struct vop2_win_data rk3568_vop_win_data[] = {
++ 	  .regs = &rk3568_esmart_win_data,
++ 	  .area = rk3568_area_data,
++ 	  .area_size = ARRAY_SIZE(rk3568_area_data),
++-	  .type = DRM_PLANE_TYPE_OVERLAY,
+++	  .type = DRM_PLANE_TYPE_PRIMARY,
++ 	  .max_upscale_factor = 8,
++ 	  .max_downscale_factor = 8,
++ 	  .dly = { 20, 47, 41 },
+diff --git a/linux/rk356x/0100-vendor/0015-OpenHD-WIFI.patch b/linux/rk356x/0100-vendor/0015-OpenHD-WIFI.patch
+new file mode 100644
+index 0000000..37e2d37
+--- /dev/null
++++ b/linux/rk356x/0100-vendor/0015-OpenHD-WIFI.patch
+@@ -0,0 +1,35 @@
++commit e138fe724e22948b1a518b324d6baf38b7129596
++Author: Raphael Scholle <raphael.scholle@uni-wuppertal.de>
++Date:   Fri Mar 15 22:50:06 2024 +0100
++
++    add openhd drivers and disable realtek ones
++
++diff --git a/drivers/net/wireless/realtek/Kconfig b/drivers/net/wireless/realtek/Kconfig
++index 474843277..b7538ac26 100644
++--- a/drivers/net/wireless/realtek/Kconfig
+++++ b/drivers/net/wireless/realtek/Kconfig
++@@ -14,7 +14,7 @@ if WLAN_VENDOR_REALTEK
++ 
++ source "drivers/net/wireless/realtek/rtl818x/Kconfig"
++ source "drivers/net/wireless/realtek/rtlwifi/Kconfig"
++-source "drivers/net/wireless/realtek/rtl8xxxu/Kconfig"
++-source "drivers/net/wireless/realtek/rtw88/Kconfig"
+++source "drivers/net/wireless/realtek/rtl8812au/Kconfig"
+++source "drivers/net/wireless/realtek/rtl88x2bu/Kconfig"
++ 
++ endif # WLAN_VENDOR_REALTEK
++diff --git a/drivers/net/wireless/realtek/Makefile b/drivers/net/wireless/realtek/Makefile
++index 888b5d594..2f1dd6d9e 100644
++--- a/drivers/net/wireless/realtek/Makefile
+++++ b/drivers/net/wireless/realtek/Makefile
++@@ -5,7 +5,7 @@
++ 
++ obj-$(CONFIG_RTL8180)		+= rtl818x/
++ obj-$(CONFIG_RTL8187)		+= rtl818x/
++-obj-$(CONFIG_RTLWIFI)		+= rtlwifi/
++-obj-$(CONFIG_RTL8XXXU)		+= rtl8xxxu/
++-obj-$(CONFIG_RTW88)		+= rtw88/
+++obj-m		+= rtl88x2bu/
+++obj-m		+= rtl8812au/
+++
++ 

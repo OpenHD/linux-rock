@@ -8,7 +8,7 @@ index bdb1bcd..4e29add 100644
              git switch --detach $origin/$BSP_BRANCH
 +
 +	    #openhd-update-wifi-card-drivers
-+            echo "__________OpenHD Part_________ && ls -a"
++            echo "__________OpenHD Part_________" && ls -a
 +            cd drivers/net/wireless/
 +            rm -Rf rtl8812au
 +            rm -Rf rtl88x2bu

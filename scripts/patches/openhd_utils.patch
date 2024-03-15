@@ -8,13 +8,13 @@ diff --git a/lib/utils.sh b/lib/utils.sh
 index bdb1bcd..2b5dd86 100644
 --- a/lib/utils.sh
 +++ b/lib/utils.sh
-@@ -199,6 +199,28 @@ prepare_source() {
+@@ -199,6 +199,29 @@ prepare_source() {
              git reset --hard FETCH_HEAD
              git clean -ffd
              git switch --detach $origin/$BSP_BRANCH
 +
 +	    #openhd-update-wifi-card-drivers
-+            echo "__________OpenHD Part_________"
++            echo "________OpenHD Part_________"
 +            cd drivers/net/wireless/
 +            rm -Rf rtl8812au
 +            rm -Rf rtl88x2bu
@@ -34,6 +34,7 @@ index bdb1bcd..2b5dd86 100644
 +            cd ../../../../
 +            patch -p1 -i scripts/patches/openhd_drm.patch
 +            patch -p1 -i scripts/patches/openhd_wifi.patch
++            echo "________OpenHD END_________"
          fi
  
          if $LONG_VERSION

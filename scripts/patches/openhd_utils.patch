@@ -15,7 +15,7 @@ index bdb1bcd..2b5dd86 100644
 +
 +	    #openhd-update-wifi-card-drivers
 +            echo "________OpenHD Part_________"
-+            cd drivers/net/wireless/
++            cd drivers/net/wireless/realtek/
 +            rm -Rf rtl8812au
 +            rm -Rf rtl88x2bu
 +            git clone https://github.com/openhd/rtl8812au/

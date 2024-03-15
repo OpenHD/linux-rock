@@ -16,13 +16,16 @@ index bdb1bcd..4e29add 100644
 +            git clone https://github.com/openhd/rtl88x2bu/
 +            git clone https://github.com/openhd/rtl88x2bu/ -b initial52-1 rtl8852bu
 +            cd rtl8812au
-+            sed -i 's/CONFIG_PLATFORM_I386_PC = y/CONFIG_PLATFORM_I386_PC = n/' Makefile || exit 1
-+            sed -i 's/CONFIG_PLATFORM_ARM64_RPI = n/CONFIG_PLATFORM_ARM64_RPI = y/' Makefile || exit 1
++            sed -i 's/CONFIG_PLATFORM_I386_PC = y/CONFIG_PLATFORM_I386_PC = n/' Makefile
++            sed -i 's/CONFIG_PLATFORM_ARM64_RPI = n/CONFIG_PLATFORM_ARM64_RPI = y/' Makefile
 +            cd ..
 +            cd rtl88x2bu
-+            sed -i 's/CONFIG_PLATFORM_I386_PC = y/CONFIG_PLATFORM_I386_PC = n/' Makefile || exit 1
-+            sed -i 's/CONFIG_PLATFORM_ARM64_RPI = n/CONFIG_PLATFORM_ARM64_RPI = y/' Makefile || exit 1
++            sed -i 's/CONFIG_PLATFORM_I386_PC = y/CONFIG_PLATFORM_I386_PC = n/' Makefile
++            sed -i 's/CONFIG_PLATFORM_ARM64_RPI = n/CONFIG_PLATFORM_ARM64_RPI = y/' Makefile
 +            cd ..
 +            cd rtl8852bu
-+            sed -e 's/aarch64\.l/arm64/'
++            sed -i 's/aarch64\.l/arm64/' Makefile
 +            cd ../../../../
++
+     fi
+ }

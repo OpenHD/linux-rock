@@ -1,8 +1,14 @@
+commit 0f61633a6014d6bce330e39b7a5ab0f88da60de8
+Author: Raphael Scholle <raphael@openhdfpv.org>
+Date:   Fri Mar 15 23:56:31 2024 +0100
+
+    modify utils
+
 diff --git a/lib/utils.sh b/lib/utils.sh
-index bdb1bcd..4e29add 100644
+index bdb1bcd..2b5dd86 100644
 --- a/lib/utils.sh
 +++ b/lib/utils.sh
-@@ -199,6 +199,27 @@ prepare_source() {
+@@ -199,6 +199,26 @@ prepare_source() {
              git reset --hard FETCH_HEAD
              git clean -ffd
              git switch --detach $origin/$BSP_BRANCH
@@ -26,6 +32,6 @@ index bdb1bcd..4e29add 100644
 +            cd rtl8852bu
 +            sed -i 's/aarch64\.l/arm64/' Makefile
 +            cd ../../../../
-+
-     fi
- }
+         fi
+ 
+         if $LONG_VERSION

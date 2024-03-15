@@ -1,5 +1,5 @@
 commit e138fe724e22948b1a518b324d6baf38b7129596
-Author: Raphael Scholle <raphael.scholle@uni-wuppertal.de>
+Author: Raphael Scholle <raphael@openhdfpv.org>
 Date:   Fri Mar 15 22:50:06 2024 +0100
 
     add openhd drivers and disable realtek ones

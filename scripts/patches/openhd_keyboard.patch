@@ -1,0 +1,270 @@
+commit b23eee91326342faf34caf03eed70e0ef9c098f1
+Author: Raphael Scholle <raphael@openhdfpv.org>
+Date:   Sat Mar 16 00:58:37 2024 +0100
+
+    add openhd keyboard
+
+diff --git a/arch/arm64/boot/dts/rockchip/rk3566-radxa-cm3.dtsi b/arch/arm64/boot/dts/rockchip/rk3566-radxa-cm3.dtsi
+index 0c83b9fb3..d92bdd746 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3566-radxa-cm3.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3566-radxa-cm3.dtsi
+@@ -83,6 +83,48 @@ sdio_pwrseq: sdio-pwrseq {
+ 		 */
+ 		reset-gpios = <&gpio2 RK_PB7 GPIO_ACTIVE_LOW>;
+ 	};
++
++	keys: gpio-keys {
++		compatible = "gpio-keys";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pwr_key>;
++		autorepeat;
++		up-key {
++			gpios = <&gpio3 RK_PC1 GPIO_ACTIVE_LOW>;
++			linux,code = <103>;
++			label = "key up";
++		};
++		down-key {
++			gpios = <&gpio4 RK_PC6 GPIO_ACTIVE_LOW>;
++			linux,code = <108>;
++			label = "key down";
++		};
++		left-key {
++			gpios = <&gpio4 RK_PB3 GPIO_ACTIVE_LOW>;
++			linux,code = <106>;
++			label = "key left";
++		};
++		right-key {
++			gpios = <&gpio3 RK_PC2 GPIO_ACTIVE_LOW>;
++			linux,code = <107>;
++			label = "key right";
++		};
++		enter-key {
++			gpios = <&gpio3 RK_PA7 GPIO_ACTIVE_LOW>;
++			linux,code = <29>;
++			label = "key enter";
++		};
++		back-key {
++			gpios = <&gpio3 RK_PA6 GPIO_ACTIVE_LOW>;
++			linux,code = <159>;
++			label = "key back";
++		};
++		reset-key {
++			gpios = <&gpio3 RK_PA5 GPIO_ACTIVE_LOW>;
++			linux,code = <2>;
++			label = "key reset";
++		};
++	};
+ };
+ 
+ &cpu0 {
+@@ -188,6 +230,19 @@ pwrkey {
+ 			status = "okay";
+ 		};
+ 
++		keys {
++			pwr_key: pwr-key {
++				rockchip,pins =
++					<3 RK_PC1 RK_FUNC_GPIO &pcfg_pull_up>,
++					<4 RK_PB3 RK_FUNC_GPIO &pcfg_pull_up>,
++					<3 RK_PA7 RK_FUNC_GPIO &pcfg_pull_up>,
++					<3 RK_PA6 RK_FUNC_GPIO &pcfg_pull_up>,
++					<3 RK_PA5 RK_FUNC_GPIO &pcfg_pull_up>,
++					<3 RK_PC2 RK_FUNC_GPIO &pcfg_pull_up>,
++					<4 RK_PC6 RK_FUNC_GPIO &pcfg_pull_up>;
++			};
++		};
++
+ 		pinctrl_rk8xx: pinctrl_rk8xx {
+ 			gpio-controller;
+ 			#gpio-cells = <2>;
+@@ -684,7 +739,7 @@ brcmf: wifi@0 {
+ 		compatible = "brcm,bcm4329-fmac";
+ 		reg = <1>;
+ 		interrupt-parent = <&gpio2>;
+-		interrupts = <RK_PC1 IRQ_TYPE_LEVEL_HIGH>;
++		// interrupts = <RK_PC1 IRQ_TYPE_LEVEL_HIGH>;
+ 		interrupt-names = "host-wake";
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&wifi_host_wake_l>;
+@@ -746,7 +801,7 @@ wifi_enable_h: wifi-enable-h {
+ 		};
+ 
+ 		wifi_host_wake_l: wifi-host-wake-irq {
+-			rockchip,pins = <2 RK_PC1 RK_FUNC_GPIO &pcfg_pull_none>;
++			// rockchip,pins = <2 RK_PC1 RK_FUNC_GPIO &pcfg_pull_none>;
+ 		};
+ 	};
+ 
+diff --git a/arch/arm64/boot/dts/rockchip/rk3566-radxa-zero-3w-aic8800ds2.dts b/arch/arm64/boot/dts/rockchip/rk3566-radxa-zero-3w-aic8800ds2.dts
+index e11ba6772..cb42385aa 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3566-radxa-zero-3w-aic8800ds2.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3566-radxa-zero-3w-aic8800ds2.dts
+@@ -26,7 +26,7 @@ wireless_bluetooth: wireless-bluetooth {
+ 		pinctrl-names = "default", "rts_gpio";
+ 		pinctrl-0 = <&uart1m0_rtsn>;
+ 		pinctrl-1 = <&uart1_gpios>;
+-		BT,reset_gpio    = <&gpio0 RK_PC1 GPIO_ACTIVE_HIGH>;
++		// BT,reset_gpio    = <&gpio0 RK_PC1 GPIO_ACTIVE_HIGH>;
+ 		BT,wake_gpio     = <&gpio0 RK_PB4 GPIO_ACTIVE_HIGH>;
+ 		BT,wake_host_irq = <&gpio0 RK_PB3 GPIO_ACTIVE_HIGH>;
+ 		status = "okay";
+@@ -39,6 +39,48 @@ sdio_pwrseq: sdio-pwrseq {
+ 		reset-gpios = <&gpio0 RK_PC0 GPIO_ACTIVE_LOW>;
+ 	};
+ 
++	keys: gpio-keys {
++		compatible = "gpio-keys";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pwr_key>;
++		autorepeat;
++		up-key {
++			gpios = <&gpio3 RK_PC1 GPIO_ACTIVE_LOW>;
++			linux,code = <103>;
++			label = "key up";
++		};
++		down-key {
++			gpios = <&gpio4 RK_PC6 GPIO_ACTIVE_LOW>;
++			linux,code = <108>;
++			label = "key down";
++		};
++		left-key {
++			gpios = <&gpio4 RK_PB3 GPIO_ACTIVE_LOW>;
++			linux,code = <106>;
++			label = "key left";
++		};
++		right-key {
++			gpios = <&gpio3 RK_PC2 GPIO_ACTIVE_LOW>;
++			linux,code = <107>;
++			label = "key right";
++		};
++		enter-key {
++			gpios = <&gpio3 RK_PA7 GPIO_ACTIVE_LOW>;
++			linux,code = <29>;
++			label = "key enter";
++		};
++		back-key {
++			gpios = <&gpio3 RK_PA6 GPIO_ACTIVE_LOW>;
++			linux,code = <159>;
++			label = "key back";
++		};
++		reset-key {
++			gpios = <&gpio3 RK_PA5 GPIO_ACTIVE_LOW>;
++			linux,code = <2>;
++			label = "key reset";
++		};
++	};
++
+ 	board_antenna: board-antenna {
+ 		status = "okay";
+ 		compatible = "regulator-fixed";
+@@ -134,6 +176,19 @@ sdmmc1_pwren: sdmmc1-pwren {
+ 		};
+ 	};
+ 
++	keys {
++		pwr_key: pwr-key {
++			rockchip,pins =
++				<3 RK_PC1 RK_FUNC_GPIO &pcfg_pull_up>,
++				<4 RK_PB3 RK_FUNC_GPIO &pcfg_pull_up>,
++				<3 RK_PA7 RK_FUNC_GPIO &pcfg_pull_up>,
++				<3 RK_PA6 RK_FUNC_GPIO &pcfg_pull_up>,
++				<3 RK_PA5 RK_FUNC_GPIO &pcfg_pull_up>,
++				<3 RK_PC2 RK_FUNC_GPIO &pcfg_pull_up>,
++				<4 RK_PC6 RK_FUNC_GPIO &pcfg_pull_up>;
++		};
++	};
++
+ 	antenna {
+ 		ant_1: ant-1 {
+ 			rockchip,pins = <3 RK_PD3 RK_FUNC_GPIO &pcfg_pull_down>;
+diff --git a/arch/arm64/boot/dts/rockchip/rk3566-radxa-zero-3w-ap6212.dts b/arch/arm64/boot/dts/rockchip/rk3566-radxa-zero-3w-ap6212.dts
+index 0abc6e60d..cdbe9e7f4 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3566-radxa-zero-3w-ap6212.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3566-radxa-zero-3w-ap6212.dts
+@@ -29,6 +29,48 @@ sdio_pwrseq: sdio-pwrseq {
+ 		reset-gpios = <&gpio0 RK_PC0 GPIO_ACTIVE_LOW>;
+ 	};
+ 
++	keys: gpio-keys {
++		compatible = "gpio-keys";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pwr_key>;
++		autorepeat;
++		up-key {
++			gpios = <&gpio3 RK_PC1 GPIO_ACTIVE_LOW>;
++			linux,code = <103>;
++			label = "key up";
++		};
++		down-key {
++			gpios = <&gpio4 RK_PC6 GPIO_ACTIVE_LOW>;
++			linux,code = <108>;
++			label = "key down";
++		};
++		left-key {
++			gpios = <&gpio4 RK_PB3 GPIO_ACTIVE_LOW>;
++			linux,code = <106>;
++			label = "key left";
++		};
++		right-key {
++			gpios = <&gpio3 RK_PC2 GPIO_ACTIVE_LOW>;
++			linux,code = <107>;
++			label = "key right";
++		};
++		enter-key {
++			gpios = <&gpio3 RK_PA7 GPIO_ACTIVE_LOW>;
++			linux,code = <29>;
++			label = "key enter";
++		};
++		back-key {
++			gpios = <&gpio3 RK_PA6 GPIO_ACTIVE_LOW>;
++			linux,code = <159>;
++			label = "key back";
++		};
++		reset-key {
++			gpios = <&gpio3 RK_PA5 GPIO_ACTIVE_LOW>;
++			linux,code = <2>;
++			label = "key reset";
++		};
++	};
++
+ 	board_antenna: board-antenna {
+ 		status = "okay";
+ 		compatible = "regulator-fixed";
+@@ -53,7 +95,7 @@ bluetooth {
+ 		clock-names = "lpo";
+ 		device-wakeup-gpios = <&gpio0 RK_PB4 GPIO_ACTIVE_HIGH>;
+ 		host-wakeup-gpios = <&gpio0 RK_PB3 GPIO_ACTIVE_HIGH>;
+-		shutdown-gpios = <&gpio0 RK_PC1 GPIO_ACTIVE_HIGH>;
++		// shutdown-gpios = <&gpio0 RK_PC1 GPIO_ACTIVE_HIGH>;
+ 		max-speed = <1500000>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&bt_host_wake_l &bt_wake_l &bt_enable_h>;
+@@ -94,7 +136,7 @@ wifi_host_wake_irq: wifi-host-wake-irq {
+ 
+ 	bt {
+ 		bt_enable_h: bt-enable-h {
+-			rockchip,pins = <0 RK_PC1 RK_FUNC_GPIO &pcfg_pull_none>;
++			// rockchip,pins = <0 RK_PC1 RK_FUNC_GPIO &pcfg_pull_none>;
+ 		};
+ 
+ 		bt_host_wake_l: bt-host-wake-l {
+@@ -149,6 +191,19 @@ sdmmc1_pwren: sdmmc1-pwren {
+ 		};
+ 	};
+ 
++	keys {
++		pwr_key: pwr-key {
++			rockchip,pins =
++				<3 RK_PC1 RK_FUNC_GPIO &pcfg_pull_up>,
++				<4 RK_PB3 RK_FUNC_GPIO &pcfg_pull_up>,
++				<3 RK_PA7 RK_FUNC_GPIO &pcfg_pull_up>,
++				<3 RK_PA6 RK_FUNC_GPIO &pcfg_pull_up>,
++				<3 RK_PA5 RK_FUNC_GPIO &pcfg_pull_up>,
++				<3 RK_PC2 RK_FUNC_GPIO &pcfg_pull_up>,
++				<4 RK_PC6 RK_FUNC_GPIO &pcfg_pull_up>;
++		};
++	};
++
+ 	antenna {
+ 		ant_1: ant-1 {
+ 			rockchip,pins = <3 RK_PD3 RK_FUNC_GPIO &pcfg_pull_down>;

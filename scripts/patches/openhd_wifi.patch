@@ -50,3 +50,17 @@ index 888b5d594e79..d5f822166ec7 100644
 -obj-$(CONFIG_RTL8XXXU)		+= rtl8xxxu/
 -obj-$(CONFIG_RTW88)		+= rtw88/
 -
+
+diff --git a/arch/arm64/configs/rockchip_linux_defconfig b/arch/arm64/configs/rockchip_linux_defconfig
+index a792f479958a..7c7d54ea5907 100644
+--- a/arch/arm64/configs/rockchip_linux_defconfig
++++ b/arch/arm64/configs/rockchip_linux_defconfig
+@@ -690,6 +690,8 @@ CONFIG_WIFI_BUILD_MODULE=y
+ CONFIG_AP6XXX=m
+ CONFIG_RTL8852BE=m
+ CONFIG_RTL8852BU=m
++CONFIG_RTL8812AU=m
++CONFIG_RTL8822BU=m
+ CONFIG_USB_NET_RNDIS_WLAN=y
+ # CONFIG_IEEE802154_DRIVERS is not set
+ CONFIG_LTE=y

@@ -43,10 +43,8 @@ jobs:
           cd bsp
           ./bsp --long-version -r radxa linux rk356x
 
-      - name: little hack for github uploads
+      - name: prepare for Upload
         run: |
-          echo "dir______________________________________"
-          tree /home/runner/work/
           cp -r /home/runner/work/linux-rock/linux-rock/bsp/*.deb /home/runner/work/linux-rock/linux-rock/
 
       - name: Upload to Github

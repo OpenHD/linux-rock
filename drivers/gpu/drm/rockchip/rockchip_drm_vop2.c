@@ -5376,6 +5376,7 @@ rockchip_atomic_helper_update_plane(struct drm_plane *plane,
 		state->legacy_cursor_update = true;
 
 	// Consti10
+	state->legacy_cursor_update = true;
 	//ret = drm_atomic_nonblocking_commit(state);
 	ret = drm_atomic_commit(state);
 fail:

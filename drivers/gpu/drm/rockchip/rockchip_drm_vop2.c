@@ -5375,7 +5375,9 @@ rockchip_atomic_helper_update_plane(struct drm_plane *plane,
 	if (plane == crtc->cursor || vpstate->async_commit)
 		state->legacy_cursor_update = true;
 
-	ret = drm_atomic_commit(state);
+	// Consti10
+	ret = drm_atomic_nonblocking_commit(state);
+	//ret = drm_atomic_commit(state);
 fail:
 	drm_atomic_state_put(state);
 	return ret;

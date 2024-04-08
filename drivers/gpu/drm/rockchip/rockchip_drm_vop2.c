@@ -9727,7 +9727,9 @@ static void vop2_crtc_atomic_flush(struct drm_crtc *crtc, struct drm_crtc_state 
 	 * signalling flip completion we need to wait for it to finish.
 	 */
 	// Consti10 never wait ...
-	//vop2_wait_for_irq_handler(crtc);
+	if(false) {
+		vop2_wait_for_irq_handler(crtc);
+	}
 
 	/**
 	 * move here is to make sure current fs call function is complete,

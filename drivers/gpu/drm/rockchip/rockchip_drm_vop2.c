@@ -9726,7 +9726,8 @@ static void vop2_crtc_atomic_flush(struct drm_crtc *crtc, struct drm_crtc_state 
 	 * fired before we set the cfg_done bit. To avoid spuriously
 	 * signalling flip completion we need to wait for it to finish.
 	 */
-	vop2_wait_for_irq_handler(crtc);
+	// Consti10 never wait ...
+	//vop2_wait_for_irq_handler(crtc);
 
 	/**
 	 * move here is to make sure current fs call function is complete,

@@ -5378,7 +5378,7 @@ rockchip_atomic_helper_update_plane(struct drm_plane *plane,
 	// Consti10
 	state->legacy_cursor_update = true;
 	//ret = drm_atomic_nonblocking_commit(state);
-	//ret = drm_atomic_commit(state);
+	ret = drm_atomic_commit(state);
 	ret=0;
 fail:
 	drm_atomic_state_put(state);
@@ -9728,10 +9728,8 @@ static void vop2_crtc_atomic_flush(struct drm_crtc *crtc, struct drm_crtc_state 
 	 * fired before we set the cfg_done bit. To avoid spuriously
 	 * signalling flip completion we need to wait for it to finish.
 	 */
-	// Consti10 never wait ...
-	if(false) {
-		vop2_wait_for_irq_handler(crtc);
-	}
+	vop2_wait_for_irq_handler(crtc);
+
 
 	/**
 	 * move here is to make sure current fs call function is complete,

@@ -1501,10 +1501,6 @@ drm_atomic_helper_wait_for_vblanks(struct drm_device *dev,
 	if (old_state->legacy_cursor_update)
 		return;
 
-	// Consti10: ehm ... fuck vsync ;)
-	if(true)
-		return;
-
 	for_each_oldnew_crtc_in_state(old_state, crtc, old_crtc_state, new_crtc_state, i) {
 		if (!new_crtc_state->active)
 			continue;

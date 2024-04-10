@@ -421,6 +421,9 @@ u32 rockchip_drm_get_dclk_by_width(int width)
 	int i = 0;
 	u32 dclk_khz;
 
+	// Consti10
+	if(true)return 594000;
+
 	for (i = 0; i < ARRAY_SIZE(rockchip_drm_dclk); i++) {
 		if (width == rockchip_drm_dclk[i].width) {
 			dclk_khz = rockchip_drm_dclk[i].dclk_khz;

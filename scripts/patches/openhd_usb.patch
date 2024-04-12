@@ -4,19 +4,6 @@ Date:   Fri Apr 5 17:00:54 2024 +0200
 
     Fix USB Ports
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3566-radxa-cm3.dtsi b/arch/arm64/boot/dts/rockchip/rk3566-radxa-cm3.dtsi
-index 0c83b9fb3850..68312e16cefb 100644
---- a/arch/arm64/boot/dts/rockchip/rk3566-radxa-cm3.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3566-radxa-cm3.dtsi
-@@ -605,7 +605,7 @@ &usb_host1_ohci {
- };
- 
- &usbdrd_dwc3 {
--	dr_mode = "otg";
-+	dr_mode = "host";
- 	extcon = <&usb2phy0>;
- 	status = "okay";
- };
 diff --git a/arch/arm64/boot/dts/rockchip/rk3566-radxa-zero3.dtsi b/arch/arm64/boot/dts/rockchip/rk3566-radxa-zero3.dtsi
 index 0245f92ca3d6..10137ac35cd3 100644
 --- a/arch/arm64/boot/dts/rockchip/rk3566-radxa-zero3.dtsi
@@ -43,3 +30,18 @@ index 0245f92ca3d6..10137ac35cd3 100644
  };
  
  &vdpu {
+
+
+diff --git a/arch/arm64/boot/dts/rockchip/rk3566-radxa-cm3.dtsi b/arch/arm64/boot/dts/rockchip/rk3566-radxa-cm3.dtsi
+index 0c83b9fb3850..68312e16cefb 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3566-radxa-cm3.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3566-radxa-cm3.dtsi
+@@ -605,7 +605,7 @@ &usb_host1_ohci {
+ };
+ 
+ &usbdrd_dwc3 {
+-	dr_mode = "otg";
++	dr_mode = "host";
+ 	extcon = <&usb2phy0>;
+ 	status = "okay";
+ };

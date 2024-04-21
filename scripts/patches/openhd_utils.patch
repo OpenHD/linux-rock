@@ -32,12 +32,12 @@ index bdb1bcd..2b5dd86 100644
 +            cd rtl8852bu
 +            sed -i 's/aarch64\.l/arm64/' Makefile
 +            cd ../../../../
-+            patch -p1 -i scripts/patches/openhd_uart.patch
 +            patch -p1 -i scripts/patches/openhd_drm.patch
 +            patch -p1 -i scripts/patches/openhd_wifi.patch
 +            patch -p1 -i scripts/patches/openhd_usb.patch
 +            patch -p1 -i scripts/patches/openhd_keyboard.patch
 +            patch -p1 -i scripts/patches/openhd_cm3.patch
++            patch -p1 -i scripts/patches/openhd_uart.patch
 +            echo "________OpenHD END_________"
          fi
  

@@ -1,14 +1,31 @@
-commit d3a053a5d47dddc8b4f7e68b284415e322a53945
+commit aa58e24f0d7f1e0b81ed40a400c381d2b6483374
 Author: Raphael <68374617+raphaelscholle@users.noreply.github.com>
-Date:   Sun Apr 21 19:55:26 2024 +0200
+Date:   Mon Apr 22 01:27:12 2024 +0200
 
-    enable uart
+    add uarts
 
+diff --git a/arch/arm64/boot/dts/rockchip/rk3566-radxa-cm3.dtsi b/arch/arm64/boot/dts/rockchip/rk3566-radxa-cm3.dtsi
+index 68312e16cefb..740397f1720b 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3566-radxa-cm3.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3566-radxa-cm3.dtsi
+@@ -711,6 +711,12 @@ bluetooth {
+ 	};
+ };
+ 
++&uart2 {
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&uart2m0_xfer>;
++};
++
+ &pinctrl {
+ 	pmic {
+ 		pmic_int: pmic_int {
 diff --git a/arch/arm64/boot/dts/rockchip/rk3566-radxa-zero-3w-aic8800ds2.dts b/arch/arm64/boot/dts/rockchip/rk3566-radxa-zero-3w-aic8800ds2.dts
-index e11ba6772eea..f209ba11a86a 100644
+index cb42385aaaea..3c26bf516f6f 100644
 --- a/arch/arm64/boot/dts/rockchip/rk3566-radxa-zero-3w-aic8800ds2.dts
 +++ b/arch/arm64/boot/dts/rockchip/rk3566-radxa-zero-3w-aic8800ds2.dts
-@@ -58,6 +58,12 @@ &uart1 {
+@@ -100,6 +100,12 @@ &uart1 {
  	pinctrl-0 = <&uart1m0_xfer &uart1m0_ctsn>;
  };
  
@@ -22,22 +39,22 @@ index e11ba6772eea..f209ba11a86a 100644
  	supports-sdio;
  	bus-width = <4>;
 diff --git a/arch/arm64/boot/dts/rockchip/rk3566-radxa-zero-3w-ap6212.dts b/arch/arm64/boot/dts/rockchip/rk3566-radxa-zero-3w-ap6212.dts
-index 0abc6e60db50..1b617414ff5b 100644
+index adce697c8c45..b44573c41f9d 100644
 --- a/arch/arm64/boot/dts/rockchip/rk3566-radxa-zero-3w-ap6212.dts
 +++ b/arch/arm64/boot/dts/rockchip/rk3566-radxa-zero-3w-ap6212.dts
-@@ -62,6 +62,12 @@ bluetooth {
- 	};
- };
- 
-+&uart2 {
+@@ -588,6 +588,12 @@ bluetooth {
+ 		 vddio-supply = <&vcc_1v8>;
+ 	 };
+  };
++
++ &uart2 {
 +	status = "okay";
 +	pinctrl-names = "default";
 +	pinctrl-0 = <&uart2m0_xfer>;
 +};
-+
- &sdmmc1 {
- 	supports-sdio;
- 	bus-width = <4>;
+  
+  &gmac1 {
+ 	 status = "disabled";
 diff --git a/arch/arm64/boot/dts/rockchip/rk3566-radxa-zero3.dts b/arch/arm64/boot/dts/rockchip/rk3566-radxa-zero3.dts
 index a8a02c1572c2..8375fa10df42 100644
 --- a/arch/arm64/boot/dts/rockchip/rk3566-radxa-zero3.dts

@@ -27,7 +27,8 @@ jobs:
           cd bsp
           chmod +x bsp
           cat linux/rk356x/fork.conf
-          cat linux/rk3588/fork.conf
+          ls linux/
+          exit 1
           # sed -i '/local kernelversion="\$(bsp_version)"/a \    local DATE=$(date +'%Y-%m-%d-%H-%M')' lib/linux.sh
           # sed -i 's/LOCALVERSION=-$PKG_REVISION-$FORK KERNELRELEASE=$kernelversion-$PKG_REVISION-$FORK KDEB_PKGVERSION=$kernelversion-${PKG_REVISION}${SOURCE_GITREV:+-$SOURCE_GITREV}/LOCALVERSION=-$PKG_REVISION-$FORK KERNELRELEASE=$kernelversion-$PKG_REVISION-$FORK KDEB_PKGVERSION=$kernelversion-${PKG_REVISION}-${DATE}-${SOURCE_GITREV:+-$SOURCE_GITREV}/g' lib/linux.sh
           # sed -i 's/BSP_GIT="https:\/\/github.com\/radxa\/kernel.git"/BSP_GIT="https:\/\/github.com\/openhd\/linux-rock.git"/' linux/rk356x/fork.conf

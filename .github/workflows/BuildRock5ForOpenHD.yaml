@@ -26,6 +26,7 @@ jobs:
           git clone https://github.com/radxa-repo/bsp --recursive
           cd bsp
           chmod +x bsp
+          ls -a
           mv .rk3588 rk3588
           # sed -i '/local kernelversion="\$(bsp_version)"/a \    local DATE=$(date +'%Y-%m-%d-%H-%M')' lib/linux.sh
           # sed -i 's/LOCALVERSION=-$PKG_REVISION-$FORK KERNELRELEASE=$kernelversion-$PKG_REVISION-$FORK KDEB_PKGVERSION=$kernelversion-${PKG_REVISION}${SOURCE_GITREV:+-$SOURCE_GITREV}/LOCALVERSION=-$PKG_REVISION-$FORK KERNELRELEASE=$kernelversion-$PKG_REVISION-$FORK KDEB_PKGVERSION=$kernelversion-${PKG_REVISION}-${DATE}-${SOURCE_GITREV:+-$SOURCE_GITREV}/g' lib/linux.sh

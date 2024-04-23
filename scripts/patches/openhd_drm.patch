@@ -1,0 +1,119 @@
+commit d63d3764aa9d4ccb62d64c5c1d3ee0118d23bf09
+Author: Raphael Scholle <raphael@openhdfpv.org>
+Date:   Fri Mar 15 19:20:58 2024 +0100
+
+    add openhd DRM patches
+	Co-authored-by: Consti10 <geierconstantinabc@gmail.com>
+
+diff --git a/drivers/gpu/drm/rockchip/rockchip_vop2_reg.c b/drivers/gpu/drm/rockchip/rockchip_vop2_reg.c
+index 31069d9ae..b888d41bd 100644
+--- a/drivers/gpu/drm/rockchip/rockchip_vop2_reg.c
++++ b/drivers/gpu/drm/rockchip/rockchip_vop2_reg.c
+@@ -2388,7 +2388,7 @@ static const struct vop2_win_data rk3528_vop_win_data[] = {
+ 	  .regs = &rk3568_esmart_win_data,
+ 	  .area = rk3568_area_data,
+ 	  .area_size = ARRAY_SIZE(rk3568_area_data),
+-	  .type = DRM_PLANE_TYPE_OVERLAY,
++	  .type = DRM_PLANE_TYPE_PRIMARY,
+ 	  .axi_id = 0,
+ 	  .axi_yrgb_id = 0x08,
+ 	  .axi_uv_id = 0x09,
+@@ -2652,8 +2652,8 @@ static const struct vop2_win_data rk3568_vop_win_data[] = {
+ 	  .name = "Smart0-win0",
+ 	  .phys_id = ROCKCHIP_VOP2_SMART0,
+ 	  .base = 0x400,
+-	  .formats = formats_for_smart,
+-	  .nformats = ARRAY_SIZE(formats_for_smart),
++	  .formats = formats_for_rk356x_esmart,
++	  .nformats = ARRAY_SIZE(formats_for_rk356x_esmart),
+ 	  .format_modifiers = format_modifiers,
+ 	  .layer_sel_id = { 3, 3, 3, 0xff },
+ 	  .supported_rotations = DRM_MODE_REFLECT_Y,
+@@ -2664,7 +2664,7 @@ static const struct vop2_win_data rk3568_vop_win_data[] = {
+ 	  .regs = &rk3568_esmart_win_data,
+ 	  .area = rk3568_area_data,
+ 	  .area_size = ARRAY_SIZE(rk3568_area_data),
+-	  .type = DRM_PLANE_TYPE_PRIMARY,
++	  .type = DRM_PLANE_TYPE_OVERLAY,
+ 	  .max_upscale_factor = 8,
+ 	  .max_downscale_factor = 8,
+ 	  .dly = { 20, 47, 41 },
+@@ -2674,8 +2674,8 @@ static const struct vop2_win_data rk3568_vop_win_data[] = {
+ 	{
+ 	  .name = "Smart1-win0",
+ 	  .phys_id = ROCKCHIP_VOP2_SMART1,
+-	  .formats = formats_for_smart,
+-	  .nformats = ARRAY_SIZE(formats_for_smart),
++	  .formats = formats_for_rk356x_esmart,
++	  .nformats = ARRAY_SIZE(formats_for_rk356x_esmart),
+ 	  .format_modifiers = format_modifiers,
+ 	  .base = 0x600,
+ 	  .layer_sel_id = { 7, 7, 7, 0xff },
+@@ -2687,7 +2687,7 @@ static const struct vop2_win_data rk3568_vop_win_data[] = {
+ 	  .regs = &rk3568_esmart_win_data,
+ 	  .area = rk3568_area_data,
+ 	  .area_size = ARRAY_SIZE(rk3568_area_data),
+-	  .type = DRM_PLANE_TYPE_PRIMARY,
++	  .type = DRM_PLANE_TYPE_OVERLAY,
+ 	  .max_upscale_factor = 8,
+ 	  .max_downscale_factor = 8,
+ 	  .dly = { 20, 47, 41 },
+@@ -2733,7 +2733,7 @@ static const struct vop2_win_data rk3568_vop_win_data[] = {
+ 	  .regs = &rk3568_esmart_win_data,
+ 	  .area = rk3568_area_data,
+ 	  .area_size = ARRAY_SIZE(rk3568_area_data),
+-	  .type = DRM_PLANE_TYPE_OVERLAY,
++	  .type = DRM_PLANE_TYPE_PRIMARY,
+ 	  .max_upscale_factor = 8,
+ 	  .max_downscale_factor = 8,
+ 	  .dly = { 20, 47, 41 },
+diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_drv.c b/drivers/gpu/drm/rockchip/rockchip_drm_drv.c
+index d5b93d57fd89..3f7069a2d3de 100644
+--- a/drivers/gpu/drm/rockchip/rockchip_drm_drv.c
++++ b/drivers/gpu/drm/rockchip/rockchip_drm_drv.c
+@@ -371,6 +371,11 @@ static const struct drm_display_mode rockchip_drm_default_modes[] = {
+ 		   798, 858, 0, 480, 489, 495, 525, 0,
+ 		   DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC),
+ 	  .picture_aspect_ratio = HDMI_PICTURE_ASPECT_4_3, },
++	/* Consti10 Added - paste from 16 - 1920x1080@60Hz 16:9 */
++	{ DRM_MODE("2560x1440", DRM_MODE_TYPE_DRIVER, 148500, 2560, 2008,
++			 2052, 2200, 0, 1440, 1084, 1089, 1125, 0,
++			 DRM_MODE_FLAG_PHSYNC | DRM_MODE_FLAG_PVSYNC),
++		.picture_aspect_ratio = HDMI_PICTURE_ASPECT_16_9, },
+ };
+ 
+ int rockchip_drm_add_modes_noedid(struct drm_connector *connector)
+@@ -416,6 +421,9 @@ u32 rockchip_drm_get_dclk_by_width(int width)
+ 	int i = 0;
+ 	u32 dclk_khz;
+ 
++	// Consti10
++	if(true)return 594000;
++
+ 	for (i = 0; i < ARRAY_SIZE(rockchip_drm_dclk); i++) {
+ 		if (width == rockchip_drm_dclk[i].width) {
+ 			dclk_khz = rockchip_drm_dclk[i].dclk_khz;
+diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c b/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
+index f86109b5420a..950ffd54aa8e 100644
+--- a/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
++++ b/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
+@@ -5375,7 +5375,11 @@ rockchip_atomic_helper_update_plane(struct drm_plane *plane,
+ 	if (plane == crtc->cursor || vpstate->async_commit)
+ 		state->legacy_cursor_update = true;
+ 
++	// Consti10
++	state->legacy_cursor_update = true;
++	//ret = drm_atomic_nonblocking_commit(state);
+ 	ret = drm_atomic_commit(state);
++	ret=0;
+ fail:
+ 	drm_atomic_state_put(state);
+ 	return ret;
+@@ -9726,6 +9730,7 @@ static void vop2_crtc_atomic_flush(struct drm_crtc *crtc, struct drm_crtc_state
+ 	 */
+ 	vop2_wait_for_irq_handler(crtc);
+ 
++
+ 	/**
+ 	 * move here is to make sure current fs call function is complete,
+ 	 * so when layer_sel_update is true, we can skip current vblank correctly.

@@ -1,0 +1,32 @@
+commit 95a00e5c6c16fbe1b5e22dd47b61e3a7bc0ac90e
+Author: Raphael <68374617+raphaelscholle@users.noreply.github.com>
+Date:   Fri Apr 5 17:00:54 2024 +0200
+
+    Fix USB Ports
+
+diff --git a/arch/arm64/boot/dts/rockchip/rk3566-radxa-zero3.dtsi b/arch/arm64/boot/dts/rockchip/rk3566-radxa-zero3.dtsi
+index 0245f92ca3d6..10137ac35cd3 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3566-radxa-zero3.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3566-radxa-zero3.dtsi
+@@ -557,7 +557,9 @@ &combphy1_usq {
+ };
+ 
+ &usbdrd_dwc3 {
+-	status = "okay";
++	dr_mode = "host";
++    extcon = <&usb2phy0>;
++    status = "okay";
+ };
+ 
+ &usbdrd30 {
+@@ -577,7 +579,9 @@ &u2phy0_otg {
+ };
+ 
+ &usbdrd_dwc3 {
+-	status = "okay";
++	dr_mode = "host";
++    extcon = <&usb2phy0>;
++    status = "okay";
+ };
+ 
+ &vdpu {

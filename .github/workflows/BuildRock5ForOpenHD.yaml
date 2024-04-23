@@ -41,8 +41,7 @@ jobs:
       - name: build kernel
         run: |
           cd bsp
-          echo $PWD
-          ls -a /home/runner/work/linux-rock/linux-rock/bsp/linux/rk3588/
+          ls -a /home/runner/work/linux-rock/linux-rock/bsp/
           ./bsp --long-version -r radxa linux rk3588
 
       - name: prepare for Upload

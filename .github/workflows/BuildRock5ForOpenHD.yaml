@@ -40,9 +40,6 @@ jobs:
 
       - name: build kernel
         run: |
-          ls -a
-          cd bsp
-          ls -a
           cd bsp
           ls -a
           ./bsp --long-version -r radxa linux rk3588

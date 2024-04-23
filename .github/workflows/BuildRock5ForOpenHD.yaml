@@ -43,6 +43,8 @@ jobs:
           ls -a
           cd bsp
           ls -a
+          cd bsp
+          ls -a
           ./bsp --long-version -r radxa linux rk3588
 
       - name: prepare for Upload

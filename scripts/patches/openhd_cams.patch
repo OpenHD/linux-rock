@@ -22,7 +22,7 @@ diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
 index dfab1d9dfc43..6044a4d6ee85 100644
 --- a/drivers/media/i2c/Kconfig
 +++ b/drivers/media/i2c/Kconfig
-@@ -1245,6 +1245,28 @@ config VIDEO_IMX415
+@@ -1245,6 +1245,36 @@ config VIDEO_IMX415
  	  To compile this driver as a module, choose M here: the
  	  module will be called imx415.
  
@@ -36,6 +36,14 @@ index dfab1d9dfc43..6044a4d6ee85 100644
 +
 +	  To compile this driver as a module, choose M here: the
 +	  module will be called arducam_pivariety.
++
++config VIDEO_IMX462
++	tristate "Arducam 462 sensor support"
++	depends on I2C && VIDEO_V4L2 && VIDEO_V4L2_SUBDEV_API
++	depends on MEDIA_CAMERA_SUPPORT
++	help
++	  This is a Video4Linux2 sensor driver for the Arducam
++	  imx462 camera.
 +
 +config VIDEO_IMX708
 +	tristate "Arducam IMX708 sensor support"

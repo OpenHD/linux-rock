@@ -53,7 +53,7 @@ index 7ac102624615..af1e28b802c8 100644
  obj-$(CONFIG_VIDEO_IMX347)	+= imx347.o
  obj-$(CONFIG_VIDEO_IMX378)	+= imx378.o
  obj-$(CONFIG_VIDEO_IMX415)	+= imx415.o
-+obj-$(CONFIG_VIDEO_IMX415)	+= imx462.o
++obj-$(CONFIG_VIDEO_IMX462)	+= imx462.o
  obj-$(CONFIG_VIDEO_IMX464)	+= imx464.o
  obj-$(CONFIG_VIDEO_IMX355)	+= imx355.o
  obj-$(CONFIG_VIDEO_IMX577)	+= imx577.o
@@ -1951,3 +1951,18 @@ index 000000000000..eba28bed99fb
 +
 +module_init(my_module_init);
 +module_exit(my_module_exit);
+diff --git a/arch/arm64/configs/rockchip_linux_defconfig b/arch/arm64/configs/rockchip_linux_defconfig
+index bca67bdfb66b..b8808419515d 100644
+--- a/arch/arm64/configs/rockchip_linux_defconfig
++++ b/arch/arm64/configs/rockchip_linux_defconfig
+@@ -830,6 +830,9 @@ CONFIG_VIDEO_GC2093=y
+ CONFIG_VIDEO_GC8034=y
+ CONFIG_VIDEO_IMX219=y
+ CONFIG_VIDEO_IMX415=y
++CONFIG_VIDEO_ARDUCAM_PIVARIETY=m
++CONFIG_VIDEO_IMX708=m
++CONFIG_VIDEO_IMX462=m
+ CONFIG_VIDEO_IMX464=y
+ CONFIG_VIDEO_OS04A10=y
+ CONFIG_VIDEO_OV4689=y
+ 

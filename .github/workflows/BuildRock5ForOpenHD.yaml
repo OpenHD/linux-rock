@@ -1,6 +1,8 @@
-name: Release
-on: [push]
-
+name: BuildRock5Kernel
+on:
+  push:
+   branches:
+      - "release-rk3588"
 
 permissions:
   contents: write
@@ -61,7 +63,7 @@ jobs:
           command: "push"
           format: "deb"
           owner: "openhd"
-          repo: "dev-release"
+          repo: "release"
           distro: "debian"
           release: "bullseye"
           republish: "true" # needed ONLY if version is not changing
@@ -75,7 +77,7 @@ jobs:
           command: "push"
           format: "deb"
           owner: "openhd"
-          repo: "dev-release"
+          repo: "release"
           distro: "debian"
           release: "bullseye"
           republish: "true" # needed ONLY if version is not changing
@@ -89,7 +91,7 @@ jobs:
           command: "push"
           format: "deb"
           owner: "openhd"
-          repo: "dev-release"
+          repo: "release"
           distro: "debian"
           release: "bullseye"
           republish: "true" # needed ONLY if version is not changing

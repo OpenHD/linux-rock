@@ -8,7 +8,7 @@ diff --git a/lib/utils.sh b/lib/utils.sh
 index bdb1bcd..2b5dd86 100644
 --- a/lib/utils.sh
 +++ b/lib/utils.sh
-@@ -199,6 +199,33 @@ prepare_source() {
+@@ -199,6 +199,34 @@ prepare_source() {
              git reset --hard FETCH_HEAD
              git clean -ffd
              git switch --detach $origin/$BSP_BRANCH

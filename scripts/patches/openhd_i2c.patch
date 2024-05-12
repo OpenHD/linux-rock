@@ -1,0 +1,115 @@
+commit df7a80647caf2bcd2a94627a94af0daee2f17ef6
+Author: Raphael <68374617+raphaelscholle@users.noreply.github.com>
+Date:   Sun May 12 22:19:50 2024 +0200
+
+    add i2c-port
+
+diff --git a/arch/arm64/boot/dts/rockchip/rk3566-radxa-cm3-io.dts b/arch/arm64/boot/dts/rockchip/rk3566-radxa-cm3-io.dts
+index c634e2065fce..b0a918af4dab 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3566-radxa-cm3-io.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3566-radxa-cm3-io.dts
+@@ -223,14 +223,8 @@ &pwm0 {
+ 
+ &i2c2 {
+ 	status = "okay";
+-	hym8563: hym8563@51 {
+-		compatible = "haoyu,hym8563";
+-		status = "okay";
+-		reg = <0x51>;
+-		#clock-cells = <0>;
+-		clock-frequency = <32768>;
+-		clock-output-names = "hym8563";
+-	};
++	pinctrl-names = "default";
++	pinctrl-0 = <&i2c2m0_xfer>;
+ };
+ 
+ &rk817 {
+diff --git a/arch/arm64/boot/dts/rockchip/rk3566-radxa-cm3-rpi-cm4-io.dts b/arch/arm64/boot/dts/rockchip/rk3566-radxa-cm3-rpi-cm4-io.dts
+index dbcabaf5bebc..33b7d0bfde67 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3566-radxa-cm3-rpi-cm4-io.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3566-radxa-cm3-rpi-cm4-io.dts
+@@ -145,6 +145,12 @@ pcf85063: pcf85063@51 {
+ 	};
+ };
+ 
++&i2c2 {
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&i2c2m0_xfer>;
++};
++
+ &threshold {
+ 	temperature = <60000>;
+ };
+diff --git a/arch/arm64/boot/dts/rockchip/rk3566-radxa-zero-3w-ap6212.dts b/arch/arm64/boot/dts/rockchip/rk3566-radxa-zero-3w-ap6212.dts
+index b44573c41f9d..22d964319fdd 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3566-radxa-zero-3w-ap6212.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3566-radxa-zero-3w-ap6212.dts
+@@ -705,7 +705,7 @@ &vop_mmu {
+  
+  &i2c3 {
+ 	 status = "okay";
+-	 pinctrl-0 = <&i2c3m1_xfer>;
++	 pinctrl-0 = <&i2c3m0_xfer>;
+  
+ 	 usbc0: fusb302@22 {
+ 		 compatible = "fcs,fusb302";
+diff --git a/arch/arm64/boot/dts/rockchip/rk3566-radxa-zero3.dts b/arch/arm64/boot/dts/rockchip/rk3566-radxa-zero3.dts
+index 8375fa10df42..d04a7f62065d 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3566-radxa-zero3.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3566-radxa-zero3.dts
+@@ -681,7 +681,7 @@ &vop_mmu {
+ 
+ &i2c3 {
+ 	status = "okay";
+-	pinctrl-0 = <&i2c3m1_xfer>;
++	pinctrl-0 = <&i2c3m0_xfer>;
+ 
+ 	usbc0: fusb302@22 {
+ 		compatible = "fcs,fusb302";
+diff --git a/arch/arm64/boot/dts/rockchip/rk3566-radxa-zero3.dtsi b/arch/arm64/boot/dts/rockchip/rk3566-radxa-zero3.dtsi
+index 10137ac35cd3..64efcd4aa2eb 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3566-radxa-zero3.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3566-radxa-zero3.dtsi
+@@ -612,7 +612,7 @@ &vop_mmu {
+ 
+ &i2c3 {
+ 	status = "okay";
+-	pinctrl-0 = <&i2c3m1_xfer>;
++	pinctrl-0 = <&i2c3m0_xfer>;
+ 
+ 	usbc0: fusb302@22 {
+ 		compatible = "fcs,fusb302";
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
+index 5edf60c77bb9..e9a566d13b47 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
+@@ -323,6 +323,11 @@ regulator-state-mem {
+ 	};
+ };
+ 
++&i2c7 {
++	status = "okay";
++	pinctrl-0 = <&i2c7m3_xfer>;
++};
++
+ &dmc {
+ 	center-supply = <&vdd_ddr_s0>;
+ 	mem-supply = <&vdd_log_s0>;
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588s-rock-5a.dts b/arch/arm64/boot/dts/rockchip/rk3588s-rock-5a.dts
+index 245cc0462a64..8584937a1bb7 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588s-rock-5a.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3588s-rock-5a.dts
+@@ -232,6 +232,11 @@ regulator-state-mem {
+ 	};
+ };
+ 
++&i2c8 {
++	status = "okay";
++	pinctrl-0 = <&i2c8m2_xfer>;
++};
++
+ /* CPU */
+ 
+ &cpu_l0 {

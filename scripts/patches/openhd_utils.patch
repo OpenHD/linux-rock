@@ -8,7 +8,7 @@ diff --git a/lib/utils.sh b/lib/utils.sh
 index bdb1bcd..2b5dd86 100644
 --- a/lib/utils.sh
 +++ b/lib/utils.sh
-@@ -199,6 +199,35 @@ prepare_source() {
+@@ -199,6 +199,36 @@ prepare_source() {
              git reset --hard FETCH_HEAD
              git clean -ffd
              git switch --detach $origin/$BSP_BRANCH
@@ -40,6 +40,7 @@ index bdb1bcd..2b5dd86 100644
 +            patch -p1 -i scripts/patches/openhd_uart.patch
 +            patch -p1 -i scripts/patches/openhd_i2c.patch
 +            patch -p1 -i scripts/patches/openhd_add_veye.patch
++            patch -p1 -i scripts/patches/openhd_camera.patch
 +            echo "________OpenHD END_________"
          fi
  

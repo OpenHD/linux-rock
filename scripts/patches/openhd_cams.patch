@@ -89,7 +89,7 @@ new file mode 100644
 index 000000000000..5d27fe3293c2
 --- /dev/null
 +++ b/drivers/media/i2c/arducam-pivariety.c
-@@ -0,0 +1,1748 @@
+@@ -0,0 +1,1753 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * A V4L2 driver for Arducam Pivariety Cameras

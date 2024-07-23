@@ -125,7 +125,7 @@ index 000000000000..5d27fe3293c2
 +#include "arducam-pivariety.h"
 +#include "../platform/rockchip/isp/rkisp_tb_helper.h"
 +
-+static int debug = 1;
++static int debug = 0;
 +module_param(debug, int, 0644);
 +
 +#define PIVARIETY_NAME			"pivariety"
@@ -1654,6 +1654,7 @@ index 000000000000..5d27fe3293c2
 +	struct pivariety *pivariety;
 +	char facing[2];
 +	u32 device_id, firmware_version;
++	u32 sensor_id;
 +	int ret;
 +
 +	dev_info(dev, "driver version: %02x.%02x.%02x",
@@ -1719,6 +1720,10 @@ index 000000000000..5d27fe3293c2
 +
 +	dev_info(dev, "firmware version: 0x%04X\n", firmware_version);
 +
++	ret = pivariety_read(pivariety, SENSOR_ID_REG, &sensor_id);
++	if (ret)
++		dev_err(dev, "read sensor id failed\n");
++
 +	if (pivariety_enum_pixformat(pivariety)) {
 +		dev_err(dev, "enum pixformat failed.\n");
 +		ret = -ENODEV;
@@ -1752,9 +1757,9 @@ index 000000000000..5d27fe3293c2
 +		facing[0] = 'f';
 +
 +	snprintf(pivariety->sd.name, sizeof(pivariety->sd.name), 
-+		 "m%02d_%s_%s %s", pivariety->module_index, facing,
-+		 PIVARIETY_NAME, dev_name(pivariety->sd.dev));
-+	// ret = v4l2_async_register_subdev_sensor(&pivariety->sd);
++		 "m%02x_%s_%s_%04x %s", pivariety->module_index, facing,
++		 PIVARIETY_NAME, sensor_id, dev_name(pivariety->sd.dev));
++
 +	ret = v4l2_async_register_subdev_sensor_common(&pivariety->sd);
 +	if (ret < 0)
 +		goto error_media_entity;

@@ -1245,6 +1245,36 @@ config VIDEO_IMX415
 	  To compile this driver as a module, choose M here: the
 	  module will be called imx415.
 
+config VIDEO_ARDUCAM_PIVARIETY
+	tristate "Arducam pivariety camera support"
+	depends on I2C && VIDEO_V4L2 && VIDEO_V4L2_SUBDEV_API
+	depends on MEDIA_CAMERA_SUPPORT
+	help
+	  This is a Video4Linux2 sensor driver for the Arducam
+	  pivariety camera.
+
+	  To compile this driver as a module, choose M here: the
+	  module will be called arducam_pivariety.
+
+config VIDEO_IMX462
+	tristate "Arducam 462 sensor support"
+	depends on I2C && VIDEO_V4L2 && VIDEO_V4L2_SUBDEV_API
+	depends on MEDIA_CAMERA_SUPPORT
+	help
+	  This is a Video4Linux2 sensor driver for the Arducam
+	  imx462 camera.
+
+config VIDEO_IMX708
+	tristate "Arducam IMX708 sensor support"
+	depends on I2C && VIDEO_V4L2 && VIDEO_V4L2_SUBDEV_API
+	depends on MEDIA_CAMERA_SUPPORT
+	help
+	  This is a Video4Linux2 sensor driver for the Arducam
+	  pivariety camera.
+
+	  To compile this driver as a module, choose M here: the
+	  module will be called imx708.
+
 config VIDEO_IMX464
 	tristate "Sony IMX464 sensor support"
 	depends on I2C && VIDEO_V4L2 && VIDEO_V4L2_SUBDEV_API

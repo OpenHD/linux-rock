@@ -371,6 +371,11 @@ static const struct drm_display_mode rockchip_drm_default_modes[] = {
 		   798, 858, 0, 480, 489, 495, 525, 0,
 		   DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC),
 	  .picture_aspect_ratio = HDMI_PICTURE_ASPECT_4_3, },
+	/* Consti10 Added - paste from 16 - 1920x1080@60Hz 16:9 */
+	{ DRM_MODE("2560x1440", DRM_MODE_TYPE_DRIVER, 148500, 2560, 2008,
+			 2052, 2200, 0, 1440, 1084, 1089, 1125, 0,
+			 DRM_MODE_FLAG_PHSYNC | DRM_MODE_FLAG_PVSYNC),
+		.picture_aspect_ratio = HDMI_PICTURE_ASPECT_16_9, },
 };
 
 int rockchip_drm_add_modes_noedid(struct drm_connector *connector)
@@ -415,6 +420,9 @@ u32 rockchip_drm_get_dclk_by_width(int width)
 {
 	int i = 0;
 	u32 dclk_khz;
+
+	// Consti10
+	if(true)return 594000;
 
 	for (i = 0; i < ARRAY_SIZE(rockchip_drm_dclk); i++) {
 		if (width == rockchip_drm_dclk[i].width) {

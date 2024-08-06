@@ -232,6 +232,11 @@
 	};
 };
 
+&i2c8 {
+	status = "okay";
+	pinctrl-0 = <&i2c8m2_xfer>;
+};
+
 /* CPU */
 
 &cpu_l0 {

@@ -323,6 +323,11 @@
 	};
 };
 
+&i2c7 {
+	status = "okay";
+	pinctrl-0 = <&i2c7m3_xfer>;
+};
+
 &dmc {
 	center-supply = <&vdd_ddr_s0>;
 	mem-supply = <&vdd_log_s0>;

@@ -1,0 +1,98 @@
+name: BuildRock5Kernel
+on:
+  push:
+   branches:
+      - "release-rk3588"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y qemu-user-static coreutils binfmt-support
+           
+      - name: prepare build
+        run: |
+          echo "Branch: ${{ github.ref_name }}"
+          BRANCH=${{ github.ref_name }}
+          git clone https://github.com/radxa-repo/bsp --recursive
+          cd bsp
+          chmod +x bsp
+          sed -i '/local kernelversion="\$(bsp_version)"/a \    local DATE=$(date +'%Y-%m-%d-%H-%M')' lib/linux.sh
+          sed -i 's/LOCALVERSION=-$PKG_REVISION-$FORK KERNELRELEASE=$kernelversion-$PKG_REVISION-$FORK KDEB_PKGVERSION=$kernelversion-${PKG_REVISION}${SOURCE_GITREV:+-$SOURCE_GITREV}/LOCALVERSION=-$PKG_REVISION-$FORK KERNELRELEASE=$kernelversion-$PKG_REVISION-$FORK KDEB_PKGVERSION=$kernelversion-${PKG_REVISION}-${DATE}-${SOURCE_GITREV:+-$SOURCE_GITREV}/g' lib/linux.sh
+          sed -i 's/BSP_GIT="https:\/\/github.com\/radxa\/kernel.git"/BSP_GIT="https:\/\/github.com\/openhd\/linux-rock.git"/' linux/rockchip/fork.conf
+          sed -i 's#BSP_BRANCH="[^"]*"#BSP_BRANCH="'"$BRANCH"'"#' linux/rockchip/fork.conf
+          COMMITHASH=$(curl -s https://api.github.com/repos/OpenHD/overlays/commits/main | grep '"sha"' | head -n 1 | cut -d '"' -f 4)
+          echo 'custom_source_action() {
+          git_source https://github.com/openhd/overlays.git '"$COMMITHASH"'
+          cp -r $SCRIPT_DIR/.src/overlays/arch $TARGET_DIR
+          }' > linux/.common/overlays.sh
+          patch -p1 -i ../scripts/patches/openhd_utils.patch
+
+      - name: build kernel
+        run: |
+          cd bsp
+          ./bsp --long-version -r radxa linux rockchip
+
+      - name: prepare for Upload
+        run: |
+          cp -r /home/runner/work/linux-rock/linux-rock/bsp/*.deb /home/runner/work/linux-rock/linux-rock/
+
+      - name: Upload to Github
+        uses: actions/upload-artifact@v2
+        with:
+          name: "rock5-kernel-openhd"
+          path: |
+            *.deb
+
+      - name: Push
+        id: push
+        uses: cloudsmith-io/action@master
+        with:
+          api-key: ${{ secrets.CLOUDSMITH_API_KEY }}
+          command: "push"
+          format: "deb"
+          owner: "openhd"
+          repo: "release"
+          distro: "debian"
+          release: "bullseye"
+          republish: "true" # needed ONLY if version is not changing
+          file: "linux-image-5.10.110*.deb"
+
+      - name: Push header
+        id: push_headers
+        uses: cloudsmith-io/action@master
+        with:
+          api-key: ${{ secrets.CLOUDSMITH_API_KEY }}
+          command: "push"
+          format: "deb"
+          owner: "openhd"
+          repo: "release"
+          distro: "debian"
+          release: "bullseye"
+          republish: "true" # needed ONLY if version is not changing
+          file: "linux-headers-5.10.110*.deb"
+          
+      - name: Push libc
+        id: push_libc
+        uses: cloudsmith-io/action@master
+        with:
+          api-key: ${{ secrets.CLOUDSMITH_API_KEY }}
+          command: "push"
+          format: "deb"
+          owner: "openhd"
+          repo: "release"
+          distro: "debian"
+          release: "bullseye"
+          republish: "true" # needed ONLY if version is not changing
+          file: "linux-libc-dev-5.10.110*.deb"

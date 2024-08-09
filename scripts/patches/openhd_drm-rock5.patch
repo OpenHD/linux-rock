@@ -1,0 +1,31 @@
+commit d63d3764aa9d4ccb62d64c5c1d3ee0118d23bf09
+Author: Raphael Scholle <raphael@openhdfpv.org>
+Date:   Fri Mar 15 19:20:58 2024 +0100
+
+    add openhd DRM patches
+	Co-authored-by: Consti10 <geierconstantinabc@gmail.com>
+
+diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c b/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
+index f86109b5420a..950ffd54aa8e 100644
+--- a/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
++++ b/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
+@@ -5375,7 +5375,11 @@ rockchip_atomic_helper_update_plane(struct drm_plane *plane,
+ 	if (plane == crtc->cursor || vpstate->async_commit)
+ 		state->legacy_cursor_update = true;
+ 
++	// Consti10
++	state->legacy_cursor_update = true;
++	//ret = drm_atomic_nonblocking_commit(state);
+ 	ret = drm_atomic_commit(state);
++	ret=0;
+ fail:
+ 	drm_atomic_state_put(state);
+ 	return ret;
+@@ -9726,6 +9730,7 @@ static void vop2_crtc_atomic_flush(struct drm_crtc *crtc, struct drm_crtc_state
+ 	 */
+ 	vop2_wait_for_irq_handler(crtc);
+ 
++
+ 	/**
+ 	 * move here is to make sure current fs call function is complete,
+ 	 * so when layer_sel_update is true, we can skip current vblank correctly.

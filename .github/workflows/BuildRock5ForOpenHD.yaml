@@ -29,7 +29,7 @@ jobs:
           git clone https://github.com/radxa-repo/bsp --recursive
           cd bsp
           chmod +x bsp
-          # sed -i '/local kernelversion="\$(bsp_version)"/a \    local DATE=$(date +'%Y-%m-%d-%H-%M')' lib/linux.sh
+          sed -i '/local kernelversion="\$(bsp_version)"/a \    local DATE=$(date +'%Y-%m-%d-%H-%M')' lib/linux.sh
           # sed -i 's/LOCALVERSION=-$PKG_REVISION-$FORK KERNELRELEASE=$kernelversion-$PKG_REVISION-$FORK KDEB_PKGVERSION=$kernelversion-${PKG_REVISION}${SOURCE_GITREV:+-$SOURCE_GITREV}/LOCALVERSION=-$PKG_REVISION-$FORK KERNELRELEASE=$kernelversion-$PKG_REVISION-$FORK KDEB_PKGVERSION=$kernelversion-${PKG_REVISION}-${DATE}-${SOURCE_GITREV:+-$SOURCE_GITREV}/g' lib/linux.sh
           # sed -i 's/BSP_GIT="https:\/\/github.com\/radxa\/kernel.git"/BSP_GIT="https:\/\/github.com\/openhd\/linux-rock.git"/' linux/rockchip/fork.conf
           # sed -i 's#BSP_BRANCH="[^"]*"#BSP_BRANCH="'"$BRANCH"'"#' linux/rockchip/fork.conf

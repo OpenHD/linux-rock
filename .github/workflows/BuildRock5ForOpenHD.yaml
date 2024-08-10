@@ -43,6 +43,7 @@ jobs:
       - name: build kernel
         run: |
           cd bsp
+          echo "start building"
           ./bsp --long-version -r radxa linux rockchip
 
       - name: prepare for Upload

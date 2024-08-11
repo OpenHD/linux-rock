@@ -4,6 +4,7 @@ on:
    branches:
       - "release-rk3588"
       - "linux-5.10-gen-rkr4.1"
+      - "test2"
 
 permissions:
   contents: write

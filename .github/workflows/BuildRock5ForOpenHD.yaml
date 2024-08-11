@@ -24,25 +24,52 @@ jobs:
            
       - name: prepare build
         run: |
-          echo "_____________________111____________________________"
+          # Print the current branch name
           echo "Branch: ${{ github.ref_name }}"
+
+          # Set the BRANCH variable to the current branch name
           BRANCH=${{ github.ref_name }}
+
+          # Clone the bsp repository recursively
           git clone https://github.com/radxa-repo/bsp --recursive
           cd bsp
+
+          # Make the bsp script executable
           chmod +x bsp
-          echo "_____________________222____________________________"
+
+          # Insert the current date into lib/linux.sh after a specific line
           sed -i '/local kernelversion="\$(bsp_version)"/a \    local DATE=$(date +'%Y-%m-%d-%H-%M')' lib/linux.sh
+
+          # Replace kernel version information with a version that includes the current date
           sed -i 's/LOCALVERSION=-$PKG_REVISION-$FORK KERNELRELEASE=$kernelversion-$PKG_REVISION-$FORK KDEB_PKGVERSION=$kernelversion-${PKG_REVISION}${SOURCE_GITREV:+-$SOURCE_GITREV}/LOCALVERSION=-$PKG_REVISION-$FORK KERNELRELEASE=$kernelversion-$PKG_REVISION-$FORK KDEB_PKGVERSION=$kernelversion-${PKG_REVISION}-${DATE}-${SOURCE_GITREV:+-$SOURCE_GITREV}/g' lib/linux.sh
+
+          # Update the BSP_GIT repository URL in linux/rockchip/fork.conf
           sed -i 's/BSP_GIT="https:\/\/github.com\/radxa\/kernel.git"/BSP_GIT="https:\/\/github.com\/openhd\/linux-rock.git"/' linux/rockchip/fork.conf
+
+          # Update the BSP_BRANCH in linux/rockchip/fork.conf to the current branch name
           sed -i 's#BSP_BRANCH="[^"]*"#BSP_BRANCH="'"$BRANCH"'"#' linux/rockchip/fork.conf
+          
+          # Print fork.conf
+          echo "___Content of fork.conf___"
+          cat linux/rockchip/fork.conf
+
+          # Fetch the latest commit hash from the OpenHD overlays repository
           COMMITHASH=$(curl -s https://api.github.com/repos/OpenHD/overlays/commits/main | grep '"sha"' | head -n 1 | cut -d '"' -f 4)
+          
+          # Print commit hash
           echo $COMMITHASH
-          echo "___________________333______________________________"
+
+          # Create a custom source action script in linux/.common/overlays.sh
           echo 'custom_source_action() {
-          git_source https://github.com/openhd/overlays.git '"$COMMITHASH"'
-          cp -r $SCRIPT_DIR/.src/overlays/arch $TARGET_DIR
+            git_source https://github.com/openhd/overlays.git '"$COMMITHASH"'
+            cp -r $SCRIPT_DIR/.src/overlays/arch $TARGET_DIR
           }' > linux/.common/overlays.sh
+
+          # Print overlays.sh
+          echo "___Content of overlays.sh___"
           cat linux/.common/overlays.sh
+
+          # Apply a patch from the scripts/patches directory
           patch -p1 -i ../scripts/patches/openhd_utils.patch
 
       - name: build kernel

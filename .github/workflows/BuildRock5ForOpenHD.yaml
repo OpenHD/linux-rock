@@ -31,7 +31,7 @@ jobs:
           BRANCH=${{ github.ref_name }}
 
           # Clone the bsp repository recursively
-          git clone https://github.com/radxa-repo/bsp -b linux-5.10-gen-rkr4.1 --recursive
+          git clone https://github.com/radxa-repo/bsp --recursive
           cd bsp
 
           # Make the bsp script executable

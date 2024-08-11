@@ -39,6 +39,8 @@ jobs:
           cp -r $SCRIPT_DIR/.src/overlays/arch $TARGET_DIR
           }' > linux/.common/overlays.sh
           patch -p1 -i ../scripts/patches/openhd_utils.patch
+          echo "__________________________________________________________222_"
+          cat linux/rockchip/fork.conf
 
       - name: build kernel
         run: |

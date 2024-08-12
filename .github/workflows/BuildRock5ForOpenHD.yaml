@@ -48,7 +48,7 @@ jobs:
           cd bsp
           echo "start building"
           ./bsp
-          ./bsp --no-prepare-source linux rk3588 -r 999
+          ./bsp --no-prepare-source linux rockchip -r 999
 
       - name: prepare for Upload
         run: |

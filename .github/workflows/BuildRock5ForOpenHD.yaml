@@ -47,7 +47,7 @@ jobs:
         run: |
           cd bsp
           echo "start building"
-          . /bsp
+          ./bsp
           ./bsp --no-prepare-source linux rk3588 -r 999
 
       - name: prepare for Upload

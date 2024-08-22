@@ -8,12 +8,13 @@ diff --git a/drivers/net/wireless/Kconfig b/drivers/net/wireless/Kconfig
 index 46f5cc40788a..c00af2f6ac00 100644
 --- a/drivers/net/wireless/Kconfig
 +++ b/drivers/net/wireless/Kconfig
-@@ -49,6 +49,8 @@ source "drivers/net/wireless/ti/Kconfig"
+@@ -49,6 +49,9 @@ source "drivers/net/wireless/ti/Kconfig"
  source "drivers/net/wireless/zydas/Kconfig"
  source "drivers/net/wireless/quantenna/Kconfig"
  source "drivers/net/wireless/rockchip_wlan/Kconfig"
 +source "drivers/net/wireless/rtl8812au/Kconfig"
 +source "drivers/net/wireless/rtl88x2bu/Kconfig"
++source "drivers/net/wireless/rtl88x2eu/Kconfig"
  
  config PCMCIA_RAYCS
  	tristate "Aviator/Raytheon 2.4GHz wireless support"
@@ -21,12 +22,13 @@ diff --git a/drivers/net/wireless/Makefile b/drivers/net/wireless/Makefile
 index 5671364ae98d..bff5de684f50 100644
 --- a/drivers/net/wireless/Makefile
 +++ b/drivers/net/wireless/Makefile
-@@ -31,3 +31,5 @@ obj-$(CONFIG_MAC80211_HWSIM)	+= mac80211_hwsim.o
+@@ -31,3 +31,6 @@ obj-$(CONFIG_MAC80211_HWSIM)	+= mac80211_hwsim.o
  
  obj-$(CONFIG_VIRT_WIFI)	+= virt_wifi.o
  obj-$(CONFIG_WL_ROCKCHIP)	+= rockchip_wlan/
 +obj-m += rtl8812au/
 +obj-m += rtl88x2bu/
++obj-m += rtl88x2eu/
 diff --git a/drivers/net/wireless/realtek/Kconfig b/drivers/net/wireless/realtek/Kconfig
 index 474843277fa1..d8dbd0596395 100644
 --- a/drivers/net/wireless/realtek/Kconfig
@@ -55,12 +57,13 @@ diff --git a/arch/arm64/configs/rockchip_linux_defconfig b/arch/arm64/configs/ro
 index a792f479958a..7c7d54ea5907 100644
 --- a/arch/arm64/configs/rockchip_linux_defconfig
 +++ b/arch/arm64/configs/rockchip_linux_defconfig
-@@ -690,6 +690,8 @@ CONFIG_WIFI_BUILD_MODULE=y
+@@ -690,6 +690,9 @@ CONFIG_WIFI_BUILD_MODULE=y
  CONFIG_AP6XXX=m
  CONFIG_RTL8852BE=m
  CONFIG_RTL8852BU=m
 +CONFIG_RTL8812AU=m
 +CONFIG_RTL8822BU=m
++CONFIG_RTL8822EU=m
  CONFIG_USB_NET_RNDIS_WLAN=y
  # CONFIG_IEEE802154_DRIVERS is not set
  CONFIG_LTE=y

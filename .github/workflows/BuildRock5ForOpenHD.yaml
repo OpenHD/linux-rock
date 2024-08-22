@@ -3,7 +3,7 @@ on:
   push:
    branches:
       - "release-rk3588"
-      - "linux-5.10-gen-rkr4.1"
+      - "release-rk3588-41"
 
 permissions:
   contents: write

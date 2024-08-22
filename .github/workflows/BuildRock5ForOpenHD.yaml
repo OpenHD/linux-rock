@@ -72,6 +72,8 @@ jobs:
           # Apply a patch from the scripts/patches directory
           patch -p1 -i ../scripts/patches/openhd_utils.patch
 
+          rm linux/.rk3588/0010-backport/0001-scripts-dtc-Update-to-upstream-version-v1.6.0-51-g18.patch
+
       - name: build kernel
         run: |
           cd bsp

@@ -59,11 +59,11 @@ jobs:
           # Print commit hash
           echo $COMMITHASH
 
-          # # Create a custom source action script in linux/.common/overlays.sh
-          # echo 'custom_source_action() {
-          #   git_source https://github.com/openhd/overlays.git '"$COMMITHASH"'
-          #   cp -r $SCRIPT_DIR/.src/overlays/arch $TARGET_DIR
-          # }' > linux/.common/overlays.sh
+          # Create a custom source action script in linux/.common/overlays.sh
+          echo 'custom_source_action() {
+            git_source https://github.com/openhd/overlays.git '"$COMMITHASH"'
+            cp -r $SCRIPT_DIR/.src/overlays/arch $TARGET_DIR
+          }' > linux/.common/overlays.sh
 
           # Print overlays.sh
           echo "___Content of overlays.sh___"

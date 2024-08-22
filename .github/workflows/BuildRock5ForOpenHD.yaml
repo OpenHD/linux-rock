@@ -72,15 +72,11 @@ jobs:
           # Apply a patch from the scripts/patches directory
           patch -p1 -i ../scripts/patches/openhd_utils.patch
 
-          #Dirty hack ?!
-          rm linux/.rk356x-4.19/0010-backport/0001-mm-page_alloc-fix-building-error-on-Werror-array-com.patch
-          rm linux/rockchip/0010-backport/0003-mm-page_alloc-fix-building-error-on-Werror-array-com.patch
-          rm linux/.rk3588/0010-backport/0003-mm-page_alloc-fix-building-error-on-Werror-array-com.patch
       - name: build kernel
         run: |
           cd bsp
           echo "start building"
-          ./bsp --long-version -r radxa linux rockchip
+          ./bsp --long-version -r radxa linux .rk3588
 
       - name: prepare for Upload
         run: |

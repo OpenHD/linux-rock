@@ -72,6 +72,9 @@ jobs:
           # Apply a patch from the scripts/patches directory
           patch -p1 -i ../scripts/patches/openhd_utils.patch
 
+          #Dirty hack ?!
+          echo "" > linux/.rk356x-4.9/0010-backport/0001-mm-page_alloc-fix-building-error-on-Werror-array-com.patch
+
       - name: build kernel
         run: |
           cd bsp

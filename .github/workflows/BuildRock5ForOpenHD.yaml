@@ -75,6 +75,7 @@ jobs:
           rm linux/.rk3588/0010-backport/0001-scripts-dtc-Update-to-upstream-version-v1.6.0-51-g18.patch
           rm linux/.rk3588/0010-backport/0003-mm-page_alloc-fix-building-error-on-Werror-array-com.patch
           rm linux/.rk3588/0010-backport/0004-etherdevice-Adjust-ether_addr-prototypes-to-silence-.patch
+          rm linux/.rk3588/0100-vendor/0004-Include-cma_heap_get_phys-when-needed.patch
       - name: build kernel
         run: |
           cd bsp

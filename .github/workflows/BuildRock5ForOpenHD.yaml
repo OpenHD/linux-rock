@@ -73,9 +73,8 @@ jobs:
           patch -p1 -i ../scripts/patches/openhd_utils.patch
 
           rm linux/.rk3588/0010-backport/0001-scripts-dtc-Update-to-upstream-version-v1.6.0-51-g18.patch
-          rm linux/.rk356x-4.19/0010-backport/0001-mm-page_alloc-fix-building-error-on-Werror-array-com.patch
-          rm linux/rockchip/0010-backport/0003-mm-page_alloc-fix-building-error-on-Werror-array-com.patch
           rm linux/.rk3588/0010-backport/0003-mm-page_alloc-fix-building-error-on-Werror-array-com.patch
+          rm linux/.rk3588/0010-backport/0004-etherdevice-Adjust-ether_addr-prototypes-to-silence-.patch
       - name: build kernel
         run: |
           cd bsp

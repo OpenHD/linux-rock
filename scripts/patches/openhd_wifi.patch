@@ -1,16 +1,16 @@
-commit 61e3653daef0779cc6543ebdc5b39fe7fbdec88f
+commit 482a59913b76cfb1cb88242f1db8e5f5b7dddccd
 Author: Raphael <68374617+raphaelscholle@users.noreply.github.com>
-Date:   Wed Apr 24 01:14:35 2024 +0200
+Date:   Sat Aug 24 00:15:24 2024 +0200
 
     insert openhd wifi
-
+    
 diff --git a/arch/arm64/configs/rockchip_linux_defconfig b/arch/arm64/configs/rockchip_linux_defconfig
-index bca67bdfb66b..62d434dbe124 100644
+index 7569882f3474..48724e783e15 100644
 --- a/arch/arm64/configs/rockchip_linux_defconfig
 +++ b/arch/arm64/configs/rockchip_linux_defconfig
-@@ -689,6 +689,9 @@ CONFIG_WL_ROCKCHIP=y
- CONFIG_WIFI_BUILD_MODULE=y
+@@ -691,6 +691,9 @@ CONFIG_WIFI_BUILD_MODULE=y
  CONFIG_AP6XXX=m
+ CONFIG_RTL8852BE=m
  CONFIG_RTL8852BU=m
 +CONFIG_RTL8812AU=m
 +CONFIG_RTL8822BU=m
@@ -19,7 +19,7 @@ index bca67bdfb66b..62d434dbe124 100644
  # CONFIG_IEEE802154_DRIVERS is not set
  CONFIG_LTE=y
 diff --git a/drivers/net/wireless/Kconfig b/drivers/net/wireless/Kconfig
-index 46f5cc40788a..c00af2f6ac00 100644
+index 46f5cc40788a..0c20dd854372 100644
 --- a/drivers/net/wireless/Kconfig
 +++ b/drivers/net/wireless/Kconfig
 @@ -49,6 +49,9 @@ source "drivers/net/wireless/ti/Kconfig"
@@ -33,7 +33,7 @@ index 46f5cc40788a..c00af2f6ac00 100644
  config PCMCIA_RAYCS
  	tristate "Aviator/Raytheon 2.4GHz wireless support"
 diff --git a/drivers/net/wireless/Makefile b/drivers/net/wireless/Makefile
-index 5671364ae98d..bff5de684f50 100644
+index 5671364ae98d..e88039ae12f4 100644
 --- a/drivers/net/wireless/Makefile
 +++ b/drivers/net/wireless/Makefile
 @@ -31,3 +31,6 @@ obj-$(CONFIG_MAC80211_HWSIM)	+= mac80211_hwsim.o
@@ -44,26 +44,25 @@ index 5671364ae98d..bff5de684f50 100644
 +obj-m += rtl88x2bu/
 +obj-m += rtl88x2eu/
 diff --git a/drivers/net/wireless/realtek/Kconfig b/drivers/net/wireless/realtek/Kconfig
-index 4a1f0e64df03..d8dbd0596395 100644
+index 474843277fa1..d8dbd0596395 100644
 --- a/drivers/net/wireless/realtek/Kconfig
 +++ b/drivers/net/wireless/realtek/Kconfig
-@@ -14,8 +14,5 @@ if WLAN_VENDOR_REALTEK
+@@ -14,7 +14,5 @@ if WLAN_VENDOR_REALTEK
  
  source "drivers/net/wireless/realtek/rtl818x/Kconfig"
  source "drivers/net/wireless/realtek/rtlwifi/Kconfig"
 -source "drivers/net/wireless/realtek/rtl8xxxu/Kconfig"
 -source "drivers/net/wireless/realtek/rtw88/Kconfig"
--source "drivers/net/wireless/realtek/rtw89/Kconfig"
  
  endif # WLAN_VENDOR_REALTEK
 diff --git a/drivers/net/wireless/realtek/Makefile b/drivers/net/wireless/realtek/Makefile
-index ab25419f56c6..2ba7e756f1dc 100644
+index 888b5d594e79..2ba7e756f1dc 100644
 --- a/drivers/net/wireless/realtek/Makefile
 +++ b/drivers/net/wireless/realtek/Makefile
-@@ -6,7 +6,4 @@
+@@ -6,6 +6,4 @@
  obj-$(CONFIG_RTL8180)		+= rtl818x/
  obj-$(CONFIG_RTL8187)		+= rtl818x/
  obj-$(CONFIG_RTLWIFI)		+= rtlwifi/
 -obj-$(CONFIG_RTL8XXXU)		+= rtl8xxxu/
 -obj-$(CONFIG_RTW88)		+= rtw88/
--obj-$(CONFIG_RTW89)		+= rtw89/
+ 

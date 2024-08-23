@@ -69,14 +69,13 @@ jobs:
           echo "___Content of overlays.sh___"
           cat linux/.common/overlays.sh
 
-          # Apply a patch from the scripts/patches directory
           patch -p1 -i ../scripts/patches/openhd_utils.patch
-
           rm linux/.rk3588/0010-backport/0001-scripts-dtc-Update-to-upstream-version-v1.6.0-51-g18.patch
           rm linux/.rk3588/0010-backport/0003-mm-page_alloc-fix-building-error-on-Werror-array-com.patch
           rm linux/.rk3588/0010-backport/0004-etherdevice-Adjust-ether_addr-prototypes-to-silence-.patch
           rm linux/.rk3588/0100-vendor/0004-Include-cma_heap_get_phys-when-needed.patch
           rm linux/.rk3588/0100-vendor/0006-Disable-tristate-for-modules-that-uses-unexported-sy.patch
+          
       - name: build kernel
         run: |
           cd bsp
@@ -106,7 +105,7 @@ jobs:
           distro: "debian"
           release: "bullseye"
           republish: "true" # needed ONLY if version is not changing
-          file: "linux-image-5.10.110*.deb"
+          file: "linux-image-5.10*.deb"
 
       - name: Push header
         id: push_headers
@@ -120,7 +119,7 @@ jobs:
           distro: "debian"
           release: "bullseye"
           republish: "true" # needed ONLY if version is not changing
-          file: "linux-headers-5.10.110*.deb"
+          file: "linux-headers-5.10*.deb"
           
       - name: Push libc
         id: push_libc
@@ -134,4 +133,4 @@ jobs:
           distro: "debian"
           release: "bullseye"
           republish: "true" # needed ONLY if version is not changing
-          file: "linux-libc-dev-5.10.110*.deb"
+          file: "linux-libc-dev-5.10*.deb"

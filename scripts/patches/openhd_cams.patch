@@ -1,14 +1,14 @@
-commit 963bf65c552e2471f67b6efef5a527b94b9153cd
+commit 155b58c3ee6813253d8fc9b3662af1532acf1030
 Author: Raphael <68374617+raphaelscholle@users.noreply.github.com>
-Date:   Thu Apr 25 16:41:08 2024 +0200
+Date:   Sat Aug 24 00:30:22 2024 +0200
 
-    cameras
+    Enable OpenHD Cams on Rock5
 
 diff --git a/arch/arm64/configs/rockchip_linux_defconfig b/arch/arm64/configs/rockchip_linux_defconfig
-index bca67bdfb66b..b8808419515d 100644
+index 7569882f3474..3f1c9c7d3b79 100644
 --- a/arch/arm64/configs/rockchip_linux_defconfig
 +++ b/arch/arm64/configs/rockchip_linux_defconfig
-@@ -830,6 +830,9 @@ CONFIG_VIDEO_GC2093=y
+@@ -833,6 +833,9 @@ CONFIG_VIDEO_GC2093=y
  CONFIG_VIDEO_GC8034=y
  CONFIG_VIDEO_IMX219=y
  CONFIG_VIDEO_IMX415=y
@@ -19,10 +19,10 @@ index bca67bdfb66b..b8808419515d 100644
  CONFIG_VIDEO_OS04A10=y
  CONFIG_VIDEO_OV4689=y
 diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-index dfab1d9dfc43..6044a4d6ee85 100644
+index d66d1b1f2999..f13baa4c4289 100644
 --- a/drivers/media/i2c/Kconfig
 +++ b/drivers/media/i2c/Kconfig
-@@ -1245,6 +1245,36 @@ config VIDEO_IMX415
+@@ -1300,6 +1300,36 @@ config VIDEO_IMX415
  	  To compile this driver as a module, choose M here: the
  	  module will be called imx415.
  
@@ -60,36 +60,25 @@ index dfab1d9dfc43..6044a4d6ee85 100644
  	tristate "Sony IMX464 sensor support"
  	depends on I2C && VIDEO_V4L2 && VIDEO_V4L2_SUBDEV_API
 diff --git a/drivers/media/i2c/Makefile b/drivers/media/i2c/Makefile
-index 7ac102624615..b334b8a94180 100644
+index eb2cad76f4fa..313b84f51120 100644
 --- a/drivers/media/i2c/Makefile
 +++ b/drivers/media/i2c/Makefile
-@@ -34,6 +34,7 @@ obj-$(CONFIG_VIDEO_DW9768)  += dw9768.o
+@@ -35,6 +35,9 @@ obj-$(CONFIG_VIDEO_DW9768)  += dw9768.o
  obj-$(CONFIG_VIDEO_DW9800W) += dw9800w.o
  obj-$(CONFIG_VIDEO_DW9807_VCM)  += dw9807-vcm.o
  obj-$(CONFIG_VIDEO_FP5510)  += fp5510.o
 +obj-$(CONFIG_VIDEO_ARDUCAM_PIVARIETY)	+= arducam-pivariety.o
++obj-$(CONFIG_VIDEO_IMX462)	+= imx462.o
++obj-$(CONFIG_VIDEO_IMX708)	+= imx708.o
  obj-$(CONFIG_VIDEO_ADV7170) += adv7170.o
  obj-$(CONFIG_VIDEO_ADV7175) += adv7175.o
  obj-$(CONFIG_VIDEO_ADV7180) += adv7180.o
-@@ -202,10 +203,12 @@ obj-$(CONFIG_VIDEO_IMX335)	+= imx335.o
- obj-$(CONFIG_VIDEO_IMX347)	+= imx347.o
- obj-$(CONFIG_VIDEO_IMX378)	+= imx378.o
- obj-$(CONFIG_VIDEO_IMX415)	+= imx415.o
-+obj-$(CONFIG_VIDEO_IMX462)	+= imx462.o
- obj-$(CONFIG_VIDEO_IMX464)	+= imx464.o
- obj-$(CONFIG_VIDEO_IMX355)	+= imx355.o
- obj-$(CONFIG_VIDEO_IMX577)	+= imx577.o
- obj-$(CONFIG_VIDEO_IMX586)	+= imx586.o
-+obj-$(CONFIG_VIDEO_IMX708)	+= imx708.o
- obj-$(CONFIG_VIDEO_JX_K17)	+= jx_k17.o
- obj-$(CONFIG_VIDEO_MAX9286)	+= max9286.o
- obj-$(CONFIG_VIDEO_MAX96714)	+= max96714.o
 diff --git a/drivers/media/i2c/arducam-pivariety.c b/drivers/media/i2c/arducam-pivariety.c
 new file mode 100644
-index 000000000000..5d27fe3293c2
+index 000000000000..0daf0b53b77b
 --- /dev/null
 +++ b/drivers/media/i2c/arducam-pivariety.c
-@@ -0,0 +1,1753 @@
+@@ -0,0 +1,1746 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * A V4L2 driver for Arducam Pivariety Cameras
@@ -214,7 +203,6 @@ index 000000000000..5d27fe3293c2
 +static const s64 link_freq_menu_items[] = {
 +	456000000,
 +};
-+
 +
 +static inline struct pivariety *to_pivariety(struct v4l2_subdev *_sd)
 +{
@@ -1021,11 +1009,7 @@ index 000000000000..5d27fe3293c2
 +	int ret = 0;
 +
 +	mutex_lock(&pivariety->mutex);
-+	// if (pivariety->streaming == enable) {
-+	// 	mutex_unlock(&pivariety->mutex);
-+	// 	return 0;
-+	// }
-+	printk("arducam pivariety set stream - %d",enable);
++
 +	if (enable) {
 +		ret = pm_runtime_get_sync(&client->dev);
 +		if (ret < 0) {
@@ -1038,13 +1022,11 @@ index 000000000000..5d27fe3293c2
 +		 * and then start streaming.
 +		 */
 +		ret = pivariety_start_streaming(pivariety);
-+		printk("pivariety_start_streaming");
 +
 +		if (ret)
 +			goto err_rpm_put;
 +	} else {
 +		pivariety_stop_streaming(pivariety);
-+		printk("pivariety_stop_streaming");
 +
 +		pm_runtime_put(&client->dev);
 +	}
@@ -1181,7 +1163,6 @@ index 000000000000..5d27fe3293c2
 +	struct pivariety *pivariety = to_pivariety(sd);
 +	struct rkmodule_channel_info *ch_info;
 +	long ret = 0;
-+	printk("%s: cmd:[%u] ",__func__,cmd);
 +	switch (cmd)
 +	{
 +	case RKMODULE_GET_MODULE_INFO:
@@ -1208,7 +1189,6 @@ index 000000000000..5d27fe3293c2
 +	struct rkmodule_awb_cfg *cfg;
 +	struct rkmodule_channel_info *ch_info;
 +	long ret;
-+	// printk("%s: cmd:[%u] ",__func__,cmd);
 +
 +	switch (cmd)
 +	{
@@ -1714,6 +1694,7 @@ index 000000000000..5d27fe3293c2
 +		goto error_power_off;
 +	}
 +
++
 +	ret = pivariety_read(pivariety, DEVICE_VERSION_REG, &firmware_version);
 +	if (ret)
 +		dev_err(dev, "read firmware version failed\n");
@@ -1760,6 +1741,7 @@ index 000000000000..5d27fe3293c2
 +		 "m%02x_%s_%s_%04x %s", pivariety->module_index, facing,
 +		 PIVARIETY_NAME, sensor_id, dev_name(pivariety->sd.dev));
 +
++	
 +	ret = v4l2_async_register_subdev_sensor_common(&pivariety->sd);
 +	if (ret < 0)
 +		goto error_media_entity;
@@ -1961,7 +1943,7 @@ index 000000000000..99d5ada309e8
 +#endif
 diff --git a/drivers/media/i2c/imx462.c b/drivers/media/i2c/imx462.c
 new file mode 100644
-index 000000000000..7b2583fb00f0
+index 000000000000..3c8d9fd37381
 --- /dev/null
 +++ b/drivers/media/i2c/imx462.c
 @@ -0,0 +1,19 @@

@@ -8,11 +8,12 @@ diff --git a/arch/arm64/configs/rockchip_linux_defconfig b/arch/arm64/configs/ro
 index 2b98c00d260f..6008cfbd349c 100644
 --- a/arch/arm64/configs/rockchip_linux_defconfig
 +++ b/arch/arm64/configs/rockchip_linux_defconfig
-@@ -833,6 +833,7 @@ CONFIG_VIDEO_GC2093=y
+@@ -833,6 +833,8 @@ CONFIG_VIDEO_GC2093=y
  CONFIG_VIDEO_GC8034=y
  CONFIG_VIDEO_IMX219=y
  CONFIG_VIDEO_IMX415=y
 +CONFIG_VIDEO_ARDUCAM_PIVARIETY=m
++CONFIG_VIDEO_IMX708=m
  CONFIG_VIDEO_IMX464=y
  CONFIG_VIDEO_VEYECAM2M=y
  CONFIG_VIDEO_OS04A10=y

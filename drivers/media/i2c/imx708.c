@@ -1983,147 +1983,114 @@ static int imx708_probe(struct i2c_client *client,
 	int ret;
 	u32 i, hdr_mode = 0;
 
-	dev_info(dev, "imx708_probe: driver version: %02x.%02x.%02x",
+	dev_info(dev, "driver version: %02x.%02x.%02x",
 		DRIVER_VERSION >> 16,
 		(DRIVER_VERSION & 0xff00) >> 8,
 		DRIVER_VERSION & 0x00ff);
 
 	imx708 = devm_kzalloc(&client->dev, sizeof(*imx708), GFP_KERNEL);
-	if (!imx708) {
-		dev_err(dev, "imx708_probe: Failed to allocate memory for imx708 structure\n");
+	if (!imx708)
 		return -ENOMEM;
-	}
 
-	dev_dbg(dev, "imx708_probe: Reading module properties from device tree\n");
-	ret = of_property_read_u32(node, RKMODULE_CAMERA_MODULE_INDEX, &imx708->module_index);
-	ret |= of_property_read_string(node, RKMODULE_CAMERA_MODULE_FACING, &imx708->module_facing);
-	ret |= of_property_read_string(node, RKMODULE_CAMERA_MODULE_NAME, &imx708->module_name);
-	ret |= of_property_read_string(node, RKMODULE_CAMERA_LENS_NAME, &imx708->len_name);
+	ret = of_property_read_u32(node, RKMODULE_CAMERA_MODULE_INDEX,
+				   &imx708->module_index);
+	ret |= of_property_read_string(node, RKMODULE_CAMERA_MODULE_FACING,
+				       &imx708->module_facing);
+	ret |= of_property_read_string(node, RKMODULE_CAMERA_MODULE_NAME,
+				       &imx708->module_name);
+	ret |= of_property_read_string(node, RKMODULE_CAMERA_LENS_NAME,
+				       &imx708->len_name);
 	if (ret) {
-		dev_err(dev, "imx708_probe: Could not get module information from device tree\n");
+		dev_err(dev, "could not get module information!\n");
 		return -EINVAL;
 	}
 
-	dev_dbg(dev, "imx708_probe: Reading HDR mode from device tree\n");
 	ret = of_property_read_u32(node, OF_CAMERA_HDR_MODE, &hdr_mode);
 	if (ret) {
 		hdr_mode = NO_HDR;
-		dev_warn(dev, "imx708_probe: Get HDR mode failed! Defaulting to no HDR\n");
+		dev_warn(dev, " Get hdr mode failed! no hdr default\n");
 	}
 
 	imx708->client = client;
 	imx708->cfg_num = ARRAY_SIZE(supported_modes);
-
-	dev_dbg(dev, "imx708_probe: Supported mode configurations: %u\n", imx708->cfg_num);
 	for (i = 0; i < imx708->cfg_num; i++) {
 		if (hdr_mode == supported_modes[i].hdr_mode) {
 			imx708->cur_mode = &supported_modes[i];
-			dev_dbg(dev, "imx708_probe: Selected HDR mode: %u\n", hdr_mode);
 			break;
 		}
 	}
 
 	if (i >= imx708->cfg_num) {
-		dev_warn(dev, "imx708_probe: No matching HDR mode found! Defaulting to first mode\n");
+		dev_warn(dev, " Get hdr mode failed! no hdr config\n");
 		imx708->cur_mode = &supported_modes[0];
 	}
 
 	sd = &imx708->subdev;
 	v4l2_i2c_subdev_init(sd, client, &imx708_subdev_ops);
-	dev_dbg(dev, "imx708_probe: Initialized V4L2 I2C sub-device\n");
 
-	dev_dbg(dev, "imx708_probe: Checking hardware configuration\n");
-	if (imx708_check_hwcfg(dev, imx708)) {
-		dev_err(dev, "imx708_probe: Hardware configuration check failed\n");
+	/* Check the hardware configuration in device tree */
+	if (imx708_check_hwcfg(dev, imx708))
 		return -EINVAL;
-	}
 
-	dev_dbg(dev, "imx708_probe: Getting system clock (xclk)\n");
+	/* Get system clock (inclk) */
 	imx708->inclk = devm_clk_get(dev, "xclk");
 	if (IS_ERR(imx708->inclk))
 		return dev_err_probe(dev, PTR_ERR(imx708->inclk),
-				     "imx708_probe: Failed to get xclk\n");
+				     "failed to get xclk\n");
 
 	imx708->inclk_freq = clk_get_rate(imx708->inclk);
-	dev_dbg(dev, "imx708_probe: System clock frequency: %u Hz\n", imx708->inclk_freq);
 	if (imx708->inclk_freq != IMX708_INCLK_FREQ)
 		return dev_err_probe(dev, -EINVAL,
-				     "imx708_probe: Inclk frequency not supported: %d Hz\n",
+				     "inclk frequency not supported: %d Hz\n",
 				     imx708->inclk_freq);
 
-	dev_dbg(dev, "imx708_probe: Getting regulators\n");
 	ret = imx708_get_regulators(imx708);
 	if (ret)
-		return dev_err_probe(dev, ret, "imx708_probe: Failed to get regulators\n");
+		return dev_err_probe(dev, ret, "failed to get regulators\n");
 
-	dev_dbg(dev, "imx708_probe: Requesting optional enable pin (reset-gpios)\n");
+	/* Request optional enable pin */
 	imx708->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_ASIS);
 	if (IS_ERR(imx708->reset_gpio))
-		dev_warn(dev, "imx708_probe: Failed to get reset-gpios\n");
-
-	dev_dbg(dev, "imx708_probe: Powering on the sensor\n");
+		dev_warn(dev, "Failed to get reset-gpios\n");
+	/*
+	 * The sensor must be powered for imx708_identify_module()
+	 * to be able to read the CHIP_ID register
+	 */
 	ret = imx708_power_on(dev);
-	if (ret) {
-		dev_err(dev, "imx708_probe: Failed to power on the sensor\n");
+	if (ret)
 		return ret;
-	}
 
-	dev_dbg(dev, "imx708_probe: Identifying module\n");
 	ret = imx708_identify_module(imx708);
-	if (ret) {
-		dev_err(dev, "imx708_probe: Failed to identify module\n");
+	if (ret)
 		goto error_power_off;
-	}
 
-	dev_dbg(dev, "imx708_probe: Enabling runtime PM and setting device to idle\n");
+
+	/* Enable runtime PM and turn off the device */
 	pm_runtime_set_active(dev);
 	pm_runtime_enable(dev);
 	pm_runtime_idle(dev);
 
-	dev_dbg(dev, "imx708_probe: Initializing controls\n");
+	/* This needs the pm runtime to be registered. */
 	ret = imx708_init_controls(imx708);
-	if (ret) {
-		dev_err(dev, "imx708_probe: Failed to initialize controls\n");
+	if (ret)
 		goto error_pm_runtime;
-	}
-
 #ifdef CONFIG_VIDEO_V4L2_SUBDEV_API
-	dev_dbg(dev, "imx708_probe: Initializing V4L2 sub-device API\n");
+	/* Initialize subdev */
 	sd->internal_ops = &imx708_internal_ops;
-	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE | V4L2_SUBDEV_FL_HAS_EVENTS;
+	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
+			    V4L2_SUBDEV_FL_HAS_EVENTS;
 #endif
-
 #if defined(CONFIG_MEDIA_CONTROLLER)
-	dev_dbg(dev, "imx708_probe: Initializing media controller entity\n");
+	/* Initialize source pads */
 	imx708->pad.flags = MEDIA_PAD_FL_SOURCE;
 	sd->entity.function = MEDIA_ENT_F_CAM_SENSOR;
 
 	ret = media_entity_pads_init(&sd->entity, 1, &imx708->pad);
 	if (ret) {
-		dev_err(dev, "imx708_probe: Failed to init entity pads: %d\n", ret);
+		dev_err(dev, "failed to init entity pads: %d\n", ret);
 		goto error_handler_free;
 	}
 #endif
-
-	dev_info(dev, "imx708_probe: Probing complete\n");
-	return 0;
-
-error_pm_runtime:
-	pm_runtime_disable(dev);
-error_power_off:
-	imx708_power_off(dev);
-	return ret;
-
-error_handler_free:
-#if defined(CONFIG_MEDIA_CONTROLLER)
-	media_entity_cleanup(&sd->entity);
-#endif
-	imx708_free_controls(imx708);
-	pm_runtime_disable(dev);
-	imx708_power_off(dev);
-	return ret;
-}
-
 
 	memset(facing, 0, sizeof(facing));
 	if (strcmp(imx708->module_facing, "back") == 0)

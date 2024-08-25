@@ -217,6 +217,7 @@ obj-$(CONFIG_VIDEO_IMX492)	+= imx492.o
 obj-$(CONFIG_VIDEO_IMX355)	+= imx355.o
 obj-$(CONFIG_VIDEO_IMX577)	+= imx577.o
 obj-$(CONFIG_VIDEO_IMX586)	+= imx586.o
+obj-$(CONFIG_VIDEO_IMX708)	+= imx708.o
 obj-$(CONFIG_VIDEO_JX_K17)	+= jx_k17.o
 obj-$(CONFIG_VIDEO_MAX9286)	+= max9286.o
 obj-$(CONFIG_VIDEO_MAX96712)	+= max96712.o

@@ -26,7 +26,7 @@
 #define IMX708_NAME			"imx708"
 #define OF_CAMERA_HDR_MODE		"rockchip,camera-hdr-mode"
 
-static int debug = 0;
+static int debug = 1;
 module_param(debug, int, 0644);
 
 #define IMX708_REG_VALUE_08BIT		1

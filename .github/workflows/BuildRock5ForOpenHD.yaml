@@ -25,7 +25,7 @@ jobs:
           echo "Branch: ${{ github.ref_name }}"
 
           # Set the BRANCH variable to the current branch name
-          BRANCH="release-rk3588-41"
+          BRANCH="debug-ardu"
 
           # Clone the bsp repository recursively
           git clone https://github.com/radxa-repo/bsp --recursive

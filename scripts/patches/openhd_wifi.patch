@@ -1,0 +1,68 @@
+commit 482a59913b76cfb1cb88242f1db8e5f5b7dddccd
+Author: Raphael <68374617+raphaelscholle@users.noreply.github.com>
+Date:   Sat Aug 24 00:15:24 2024 +0200
+
+    insert openhd wifi
+    
+diff --git a/arch/arm64/configs/rockchip_linux_defconfig b/arch/arm64/configs/rockchip_linux_defconfig
+index 7569882f3474..48724e783e15 100644
+--- a/arch/arm64/configs/rockchip_linux_defconfig
++++ b/arch/arm64/configs/rockchip_linux_defconfig
+@@ -691,6 +691,9 @@ CONFIG_WIFI_BUILD_MODULE=y
+ CONFIG_AP6XXX=m
+ CONFIG_RTL8852BE=m
+ CONFIG_RTL8852BU=m
++CONFIG_RTL8812AU=m
++CONFIG_RTL8822BU=m
++CONFIG_RTL8822EU=m
+ CONFIG_USB_NET_RNDIS_WLAN=y
+ # CONFIG_IEEE802154_DRIVERS is not set
+ CONFIG_LTE=y
+diff --git a/drivers/net/wireless/Kconfig b/drivers/net/wireless/Kconfig
+index 46f5cc40788a..0c20dd854372 100644
+--- a/drivers/net/wireless/Kconfig
++++ b/drivers/net/wireless/Kconfig
+@@ -49,6 +49,9 @@ source "drivers/net/wireless/ti/Kconfig"
+ source "drivers/net/wireless/zydas/Kconfig"
+ source "drivers/net/wireless/quantenna/Kconfig"
+ source "drivers/net/wireless/rockchip_wlan/Kconfig"
++source "drivers/net/wireless/rtl8812au/Kconfig"
++source "drivers/net/wireless/rtl88x2bu/Kconfig"
++source "drivers/net/wireless/rtl88x2eu/Kconfig"
+ 
+ config PCMCIA_RAYCS
+ 	tristate "Aviator/Raytheon 2.4GHz wireless support"
+diff --git a/drivers/net/wireless/Makefile b/drivers/net/wireless/Makefile
+index 5671364ae98d..e88039ae12f4 100644
+--- a/drivers/net/wireless/Makefile
++++ b/drivers/net/wireless/Makefile
+@@ -31,3 +31,6 @@ obj-$(CONFIG_MAC80211_HWSIM)	+= mac80211_hwsim.o
+ 
+ obj-$(CONFIG_VIRT_WIFI)	+= virt_wifi.o
+ obj-$(CONFIG_WL_ROCKCHIP)	+= rockchip_wlan/
++obj-m += rtl8812au/
++obj-m += rtl88x2bu/
++obj-m += rtl88x2eu/
+diff --git a/drivers/net/wireless/realtek/Kconfig b/drivers/net/wireless/realtek/Kconfig
+index 474843277fa1..d8dbd0596395 100644
+--- a/drivers/net/wireless/realtek/Kconfig
++++ b/drivers/net/wireless/realtek/Kconfig
+@@ -14,7 +14,5 @@ if WLAN_VENDOR_REALTEK
+ 
+ source "drivers/net/wireless/realtek/rtl818x/Kconfig"
+ source "drivers/net/wireless/realtek/rtlwifi/Kconfig"
+-source "drivers/net/wireless/realtek/rtl8xxxu/Kconfig"
+-source "drivers/net/wireless/realtek/rtw88/Kconfig"
+ 
+ endif # WLAN_VENDOR_REALTEK
+diff --git a/drivers/net/wireless/realtek/Makefile b/drivers/net/wireless/realtek/Makefile
+index 888b5d594e79..2ba7e756f1dc 100644
+--- a/drivers/net/wireless/realtek/Makefile
++++ b/drivers/net/wireless/realtek/Makefile
+@@ -6,6 +6,4 @@
+ obj-$(CONFIG_RTL8180)		+= rtl818x/
+ obj-$(CONFIG_RTL8187)		+= rtl818x/
+ obj-$(CONFIG_RTLWIFI)		+= rtlwifi/
+-obj-$(CONFIG_RTL8XXXU)		+= rtl8xxxu/
+-obj-$(CONFIG_RTW88)		+= rtw88/
+ 

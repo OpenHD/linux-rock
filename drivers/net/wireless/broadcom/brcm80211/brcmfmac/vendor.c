@@ -147,7 +147,7 @@ static int brcmf_cfg80211_vndr_cmds_frameburst(struct wiphy *wiphy,
 					       struct wireless_dev *wdev,
 					       const void *data, int len)
 {
-	int ret = 0;
+	int ret;
 	int val = *(int *)data;
 	struct brcmf_cfg80211_vif *vif;
 	struct brcmf_if *ifp;

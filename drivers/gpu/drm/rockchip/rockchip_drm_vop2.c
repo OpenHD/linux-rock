@@ -3133,8 +3133,11 @@ vop2_wb_connector_mode_valid(struct drm_connector *connector,
 	h = mode->vdisplay;
 
 
-	if (w * h > vop2->data->wb->max_output.width * vop2->data->wb->max_output.height)
-		return MODE_BAD;
+	if (w > vop2->data->wb->max_output.width)
+		return MODE_BAD_HVALUE;
+
+	if (h > vop2->data->wb->max_output.height)
+		return MODE_BAD_VVALUE;
 
 	return MODE_OK;
 }

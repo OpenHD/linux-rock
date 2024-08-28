@@ -6462,6 +6462,7 @@ void rkcif_set_fps(struct rkcif_stream *stream, struct rkcif_fps *fps)
 
 	vblank_def = rkcif_get_sensor_vblank_def(cif_dev);
 	vblank_curr = rkcif_get_sensor_vblank(cif_dev);
+	printk("vblank_def = %d vblank_curr= %d\r\n",vblank_def,vblank_curr );
 	if (vblank_def)
 		cur_fps = def_fps * (u32)(vblank_def + sensor->raw_rect.height) /
 			  (u32)(vblank_curr + sensor->raw_rect.height);

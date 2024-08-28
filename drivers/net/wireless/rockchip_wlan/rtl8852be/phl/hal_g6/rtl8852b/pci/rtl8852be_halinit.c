@@ -48,9 +48,9 @@ static enum rtw_hal_status _hal_aspm_disable_8852be(struct hal_info_t *hal_info)
 	/* set ignore to others */
 	pcicfg.wake_ctrl = MAC_AX_PCIE_IGNORE;
 	pcicfg.crq_ctrl = MAC_AX_PCIE_IGNORE;
-	pcicfg.clkdly_ctrl = (enum mac_ax_pcie_clkdly)MAC_AX_PCIE_IGNORE;
-	pcicfg.l0sdly_ctrl = (enum mac_ax_pcie_l0sdly)MAC_AX_PCIE_IGNORE;
-	pcicfg.l1dly_ctrl = (enum mac_ax_pcie_l1dly)MAC_AX_PCIE_IGNORE;
+	pcicfg.clkdly_ctrl = MAC_AX_PCIE_IGNORE;
+	pcicfg.l0sdly_ctrl = MAC_AX_PCIE_IGNORE;
+	pcicfg.l1dly_ctrl = MAC_AX_PCIE_IGNORE;
 
 
 	PHL_TRACE(COMP_PHL_DBG, _PHL_INFO_,

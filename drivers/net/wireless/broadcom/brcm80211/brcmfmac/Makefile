@@ -5,6 +5,10 @@
 # Copyright (c) 2010 Broadcom Corporation
 #
 
+ccflags-y += \
+	-I$(src) \
+	-I$(src)/../include
+
 obj-$(CONFIG_BRCMFMAC) += brcmfmac.o
 brcmfmac-objs += \
 		cfg80211.o \

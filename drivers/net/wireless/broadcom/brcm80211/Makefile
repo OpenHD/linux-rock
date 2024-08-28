@@ -7,7 +7,6 @@
 
 # common flags
 subdir-ccflags-$(CONFIG_BRCMDBG)	+= -DDEBUG
-subdir-ccflags-y += -I$(srctree)/$(src)/include
 
 obj-$(CONFIG_BRCMUTIL)	+= brcmutil/
 obj-$(CONFIG_BRCMFMAC)	+= brcmfmac/

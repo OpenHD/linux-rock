@@ -114,7 +114,7 @@
 #define IMX415_VTS_MAX			0x7fff
 
 #define IMX415_GAIN_MIN			0x00
-#define IMX415_GAIN_MAX			0xf0
+#define IMX415_GAIN_MAX			0xf0   //  240
 #define IMX415_GAIN_STEP		1
 #define IMX415_GAIN_DEFAULT		0x00
 

@@ -279,7 +279,7 @@ phl_ps_ips_cfg(struct phl_info_t *phl_info, struct ps_cfg *cfg, u8 en)
 	ips_info.en = en;
 	ips_info.macid = cfg->macid;
 
-	return (enum rtw_phl_status)rtw_hal_ps_ips_cfg(phl_info->hal, &ips_info);
+	return rtw_hal_ps_ips_cfg(phl_info->hal, &ips_info);
 }
 
 enum rtw_phl_status

@@ -2660,7 +2660,7 @@ rtw_hal_mac_lv1_rcvy(struct hal_info_t *hal_info, enum rtw_phl_ser_lv1_recv_step
 	u32 mac_err = 0;
 	struct mac_ax_adapter *mac = hal_to_mac(hal_info);
 
-	mac_err = mac->ops->lv1_rcvy(mac, (enum mac_ax_lv1_rcvy_step)step);
+	mac_err = mac->ops->lv1_rcvy(mac, step);
 	if (mac_err != MACSUCCESS) {
 		PHL_ERR("%s : mac status %d.\n", __func__, mac_err);
 		return RTW_HAL_STATUS_FAILURE;
@@ -5679,9 +5679,9 @@ rtw_hal_mac_lps_cfg(struct hal_info_t *hal_info,
 		ax_ps_mode = MAC_AX_PS_MODE_ACTIVE;
 	}
 
-	ax_lps_info.listen_bcn_mode = (enum mac_ax_listern_bcn_mode)lps_info->listen_bcn_mode;
+	ax_lps_info.listen_bcn_mode = lps_info->listen_bcn_mode;
 	ax_lps_info.awake_interval = lps_info->awake_interval;
-	ax_lps_info.smart_ps_mode = (enum mac_ax_smart_ps_mode)lps_info->smart_ps_mode;
+	ax_lps_info.smart_ps_mode = lps_info->smart_ps_mode;
 
 	if (mac->ops->cfg_lps(mac, (u8)lps_info->macid, ax_ps_mode,
 		&ax_lps_info) == MACSUCCESS)

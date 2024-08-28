@@ -49,6 +49,7 @@ jobs:
           # Print fork.conf
           echo "___Content of fork.conf___"
           cat linux/.rk3588/fork.conf
+          mv linux linux/.rk3588/ linux/rk3588-ohd/
 
           # Fetch the latest commit hash from the OpenHD overlays repository
           COMMITHASH=$(curl -s https://api.github.com/repos/OpenHD/overlays/commits/main | grep '"sha"' | head -n 1 | cut -d '"' -f 4)
@@ -77,7 +78,7 @@ jobs:
         run: |
           cd bsp
           echo "start building"
-          ./bsp --long-version -r radxa linux .rk3588
+          ./bsp --long-version -r radxa linux rk3588-ohd
 
       - name: prepare for Upload
         run: |

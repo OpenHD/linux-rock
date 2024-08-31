@@ -1,13 +1,18 @@
 // SPDX-License-Identifier: GPL-2.0
 // Copyright (C) 2018 Intel Corporation
-
+#include <asm/unaligned.h>
 #include <linux/acpi.h>
 #include <linux/delay.h>
+#include <linux/gpio/consumer.h>
 #include <linux/i2c.h>
 #include <linux/module.h>
 #include <linux/pm_runtime.h>
+#include <linux/regulator/consumer.h>
+#include <linux/rk-camera-module.h>
+#include <linux/version.h>
 #include <media/v4l2-ctrls.h>
 #include <media/v4l2-device.h>
+#include <linux/rk_vcm_head.h>
 
 #define AK7375_MAX_FOCUS_POS	4095
 /*
@@ -73,11 +78,14 @@ static int ak7375_i2c_write(struct ak7375_device *ak7375,
 static int ak7375_set_ctrl(struct v4l2_ctrl *ctrl)
 {
 	struct ak7375_device *dev_vcm = to_ak7375_vcm(ctrl);
+   
+    
+	if (ctrl->id == V4L2_CID_FOCUS_ABSOLUTE){
 
-	if (ctrl->id == V4L2_CID_FOCUS_ABSOLUTE)
+		printk("set ctrl value: %d\r\n",ctrl->val);
 		return ak7375_i2c_write(dev_vcm, AK7375_REG_POSITION,
 					ctrl->val << 4, 2);
-
+	}
 	return -EINVAL;
 }
 
@@ -110,7 +118,100 @@ static const struct v4l2_subdev_internal_ops ak7375_int_ops = {
 	.close = ak7375_close,
 };
 
-static const struct v4l2_subdev_ops ak7375_ops = { };
+
+
+static long ak7375_ioctl(struct v4l2_subdev *sd, unsigned int cmd, void *arg)
+{
+	struct i2c_client *client = v4l2_get_subdevdata(sd);
+	//struct ak7375_device *ak7375_dev = sd_to_ak7375_vcm(sd);
+	struct rk_cam_vcm_tim *vcm_tim;
+	struct rk_cam_vcm_cfg *vcm_cfg;
+	int ret = 0;
+
+	if (cmd == RK_VIDIOC_VCM_TIMEINFO) {
+		vcm_tim = (struct rk_cam_vcm_tim *)arg;
+
+		// vcm_tim->vcm_start_t.tv_sec = ak7375_dev->start_move_tv.tv_sec;
+		// vcm_tim->vcm_start_t.tv_usec = ak7375_dev->start_move_tv.tv_usec;
+		// vcm_tim->vcm_end_t.tv_sec = ak7375_dev->end_move_tv.tv_sec;
+		// vcm_tim->vcm_end_t.tv_usec = ak7375_dev->end_move_tv.tv_usec;
+
+		// dev_dbg(&client->dev, "ak7375_get_move_res 0x%lx, 0x%lx, 0x%lx, 0x%lx\n",
+		// 	vcm_tim->vcm_start_t.tv_sec, vcm_tim->vcm_start_t.tv_usec,
+		// 	vcm_tim->vcm_end_t.tv_sec, vcm_tim->vcm_end_t.tv_usec);
+	} else if (cmd == RK_VIDIOC_GET_VCM_CFG) {
+		vcm_cfg = (struct rk_cam_vcm_cfg *)arg;
+
+		// vcm_cfg->start_ma = ak7375_dev->vcm_cfg.start_ma;
+		// vcm_cfg->rated_ma = ak7375_dev->vcm_cfg.rated_ma;
+		// vcm_cfg->step_mode = ak7375_dev->vcm_cfg.step_mode;
+	} else if (cmd == RK_VIDIOC_SET_VCM_CFG) {
+		vcm_cfg = (struct rk_cam_vcm_cfg *)arg;
+
+		// ak7375_dev->vcm_cfg.start_ma = vcm_cfg->start_ma;
+		// ak7375_dev->vcm_cfg.rated_ma = vcm_cfg->rated_ma;
+		// ak7375_dev->vcm_cfg.step_mode = vcm_cfg->step_mode;
+		//ak7375_update_vcm_cfg(ak7375_dev);
+	} else {
+		dev_err(&client->dev,
+			"cmd 0x%x not supported\n", cmd);
+		return -EINVAL;
+	}
+
+	return ret;
+}
+
+#ifdef CONFIG_COMPAT
+static long ak7375_compat_ioctl32(struct v4l2_subdev *sd, unsigned int cmd, unsigned long arg)
+{
+	struct i2c_client *client = v4l2_get_subdevdata(sd);
+	struct rk_cam_compat_vcm_tim __user *p32 = compat_ptr(arg);
+	struct rk_cam_compat_vcm_tim compat_vcm_tim;
+	struct rk_cam_vcm_tim vcm_tim;
+	struct rk_cam_vcm_cfg vcm_cfg;
+	long ret;
+
+	if (cmd == RK_VIDIOC_COMPAT_VCM_TIMEINFO) {
+		ret = ak7375_ioctl(sd, RK_VIDIOC_VCM_TIMEINFO, &vcm_tim);
+		compat_vcm_tim.vcm_start_t.tv_sec = vcm_tim.vcm_start_t.tv_sec;
+		compat_vcm_tim.vcm_start_t.tv_usec = vcm_tim.vcm_start_t.tv_usec;
+		compat_vcm_tim.vcm_end_t.tv_sec = vcm_tim.vcm_end_t.tv_sec;
+		compat_vcm_tim.vcm_end_t.tv_usec = vcm_tim.vcm_end_t.tv_usec;
+
+		put_user(compat_vcm_tim.vcm_start_t.tv_sec, &p32->vcm_start_t.tv_sec);
+		put_user(compat_vcm_tim.vcm_start_t.tv_usec, &p32->vcm_start_t.tv_usec);
+		put_user(compat_vcm_tim.vcm_end_t.tv_sec, &p32->vcm_end_t.tv_sec);
+		put_user(compat_vcm_tim.vcm_end_t.tv_usec, &p32->vcm_end_t.tv_usec);
+	} else if (cmd == RK_VIDIOC_GET_VCM_CFG) {
+		ret = ak7375_ioctl(sd, RK_VIDIOC_GET_VCM_CFG, &vcm_cfg);
+		if (!ret)
+			ret = copy_to_user(up, &vcm_cfg, sizeof(vcm_cfg));
+	} else if (cmd == RK_VIDIOC_SET_VCM_CFG) {
+		ret = copy_from_user(&vcm_cfg, up, sizeof(vcm_cfg));
+		if (!ret)
+			ret = ak7375_ioctl(sd, cmd, &vcm_cfg);
+	} else {
+		dev_err(&client->dev,
+			"cmd 0x%x not supported\n", cmd);
+		return -EINVAL;
+	}
+
+	return ret;
+}
+#endif
+
+
+
+static const struct v4l2_subdev_core_ops ak7375_core_ops = {
+	.ioctl = ak7375_ioctl,
+#ifdef CONFIG_COMPAT
+	.compat_ioctl32 = ak7375_compat_ioctl32
+#endif
+};
+
+static const struct v4l2_subdev_ops ak7375_ops = {
+	.core = &ak7375_core_ops,
+ };
 
 static void ak7375_subdev_cleanup(struct ak7375_device *ak7375_dev)
 {
@@ -127,7 +228,7 @@ static int ak7375_init_controls(struct ak7375_device *dev_vcm)
 	v4l2_ctrl_handler_init(hdl, 1);
 
 	dev_vcm->focus = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_FOCUS_ABSOLUTE,
-		0, AK7375_MAX_FOCUS_POS, AK7375_FOCUS_STEPS, 0);
+		0, AK7375_MAX_FOCUS_POS, AK7375_FOCUS_STEPS, 900);
 
 	if (hdl->error)
 		dev_err(dev_vcm->sd.dev, "%s fail error: 0x%x\n",
@@ -197,30 +298,30 @@ static int ak7375_remove(struct i2c_client *client)
 static int __maybe_unused ak7375_vcm_suspend(struct device *dev)
 {
 
-	struct i2c_client *client = to_i2c_client(dev);
-	struct v4l2_subdev *sd = i2c_get_clientdata(client);
-	struct ak7375_device *ak7375_dev = sd_to_ak7375_vcm(sd);
-	int ret, val;
+	// struct i2c_client *client = to_i2c_client(dev);
+	// struct v4l2_subdev *sd = i2c_get_clientdata(client);
+	// struct ak7375_device *ak7375_dev = sd_to_ak7375_vcm(sd);
+	// int ret, val;
 
-	if (!ak7375_dev->active)
-		return 0;
+	// if (!ak7375_dev->active)
+	// 	return 0;
 
-	for (val = ak7375_dev->focus->val & ~(AK7375_CTRL_STEPS - 1);
-	     val >= 0; val -= AK7375_CTRL_STEPS) {
-		ret = ak7375_i2c_write(ak7375_dev, AK7375_REG_POSITION,
-				       val << 4, 2);
-		if (ret)
-			dev_err_once(dev, "%s I2C failure: %d\n",
-				     __func__, ret);
-		usleep_range(AK7375_CTRL_DELAY_US, AK7375_CTRL_DELAY_US + 10);
-	}
+	// for (val = ak7375_dev->focus->val & ~(AK7375_CTRL_STEPS - 1);
+	//      val >= 0; val -= AK7375_CTRL_STEPS) {
+	// 	ret = ak7375_i2c_write(ak7375_dev, AK7375_REG_POSITION,
+	// 			       val << 4, 2);
+	// 	if (ret)
+	// 		dev_err_once(dev, "%s I2C failure: %d\n",
+	// 			     __func__, ret);
+	// 	usleep_range(AK7375_CTRL_DELAY_US, AK7375_CTRL_DELAY_US + 10);
+	// }
 
-	ret = ak7375_i2c_write(ak7375_dev, AK7375_REG_CONT,
-			       AK7375_MODE_STANDBY, 1);
-	if (ret)
-		dev_err(dev, "%s I2C failure: %d\n", __func__, ret);
+	// ret = ak7375_i2c_write(ak7375_dev, AK7375_REG_CONT,
+	// 		       AK7375_MODE_STANDBY, 1);
+	// if (ret)
+	// 	dev_err(dev, "%s I2C failure: %d\n", __func__, ret);
 
-	ak7375_dev->active = false;
+	// ak7375_dev->active = false;
 
 	return 0;
 }
@@ -238,8 +339,8 @@ static int __maybe_unused ak7375_vcm_resume(struct device *dev)
 	struct ak7375_device *ak7375_dev = sd_to_ak7375_vcm(sd);
 	int ret, val;
 
-	if (ak7375_dev->active)
-		return 0;
+	// if (ak7375_dev->active)
+	// 	return 0;
 
 	ret = ak7375_i2c_write(ak7375_dev, AK7375_REG_CONT,
 		AK7375_MODE_ACTIVE, 1);
@@ -248,18 +349,31 @@ static int __maybe_unused ak7375_vcm_resume(struct device *dev)
 		return ret;
 	}
 
-	for (val = ak7375_dev->focus->val % AK7375_CTRL_STEPS;
-	     val <= ak7375_dev->focus->val;
-	     val += AK7375_CTRL_STEPS) {
-		ret = ak7375_i2c_write(ak7375_dev, AK7375_REG_POSITION,
+	// for (val = ak7375_dev->focus->val % AK7375_CTRL_STEPS;
+	//      val <= ak7375_dev->focus->val;
+	//      val += AK7375_CTRL_STEPS) {
+	// 	printk("ak7375_vcm_resume set vcm positon : %d\r\n",val);
+	// 	ret = ak7375_i2c_write(ak7375_dev, AK7375_REG_POSITION,
+	// 			       val << 4, 2);
+	// 	if (ret)
+	// 		dev_err_ratelimited(dev, "%s I2C failure: %d\n",
+	// 					__func__, ret);
+	// 	usleep_range(AK7375_CTRL_DELAY_US, AK7375_CTRL_DELAY_US + 10);
+	// }
+
+	//ak7375_dev->active = true;
+
+
+//arducam fixed
+	val = ak7375_dev->focus->val;
+	printk("ak7375_vcm_resume set vcm positon : %d\r\n",val);
+	ret = ak7375_i2c_write(ak7375_dev, AK7375_REG_POSITION,
 				       val << 4, 2);
 		if (ret)
 			dev_err_ratelimited(dev, "%s I2C failure: %d\n",
 						__func__, ret);
-		usleep_range(AK7375_CTRL_DELAY_US, AK7375_CTRL_DELAY_US + 10);
-	}
 
-	ak7375_dev->active = true;
+
 
 	return 0;
 }

@@ -1299,7 +1299,16 @@ config VIDEO_IMX415
 
 	  To compile this driver as a module, choose M here: the
 	  module will be called imx415.
+config VIDEO_ARDUCAM_PIVARIETY
+	tristate "Arducam pivariety camera support"
+	depends on I2C && VIDEO_V4L2 && VIDEO_V4L2_SUBDEV_API
+	depends on MEDIA_CAMERA_SUPPORT
+	help
+	  This is a Video4Linux2 sensor driver for the Arducam
+	  pivariety camera.
 
+	  To compile this driver as a module, choose M here: the
+	  module will be called arducam_pivariety.
 config VIDEO_IMX464
 	tristate "Sony IMX464 sensor support"
 	depends on I2C && VIDEO_V4L2 && VIDEO_V4L2_SUBDEV_API
@@ -1376,6 +1385,26 @@ config VIDEO_OS02G10
 	help
 	  This is a Video4Linux2 sensor driver for the OmniVision
 	  OS02G10 camera.
+
+config VIDEO_DS90UB954
+       tristate "TI FDPLINK III support."
+       depends on I2C && VIDEO_V4L2 && VIDEO_V4L2_SUBDEV_API
+       help
+            Driver for TI FDPLINK III .
+
+config VIDEO_VEYECAM2M
+       tristate "VEYE 2M camera support."
+       depends on I2C && VIDEO_V4L2 && VIDEO_V4L2_SUBDEV_API
+       depends on MEDIA_CAMERA_SUPPORT
+       help
+               Driver for veye 2m camera.
+               
+config VIDEO_VEYEMVCAM
+       tristate "VEYE MV series camera support."
+       depends on I2C && VIDEO_V4L2 && VIDEO_V4L2_SUBDEV_API
+       depends on MEDIA_CAMERA_SUPPORT
+       help
+               Driver for veye mv series camera.
 
 config VIDEO_OS03B10
 	tristate "OmniVision OS03B10 sensor support"

@@ -212,6 +212,7 @@ obj-$(CONFIG_VIDEO_IMX335)	+= imx335.o
 obj-$(CONFIG_VIDEO_IMX347)	+= imx347.o
 obj-$(CONFIG_VIDEO_IMX378)	+= imx378.o
 obj-$(CONFIG_VIDEO_IMX415)	+= imx415.o
+obj-$(CONFIG_VIDEO_ARDUCAM_PIVARIETY)	+= arducam-pivariety.o
 obj-$(CONFIG_VIDEO_IMX464)	+= imx464.o
 obj-$(CONFIG_VIDEO_IMX492)	+= imx492.o
 obj-$(CONFIG_VIDEO_IMX355)	+= imx355.o
@@ -227,6 +228,9 @@ obj-$(CONFIG_VIDEO_RDACM20)	+= rdacm20-camera_module.o
 obj-$(CONFIG_VIDEO_ST_MIPID02) += st-mipid02.o
 
 obj-$(CONFIG_SDR_MAX2175) += max2175.o
+obj-$(CONFIG_VIDEO_DS90UB954) += ds90ub954.o
+obj-$(CONFIG_VIDEO_VEYECAM2M) += veyecam2m.o
+obj-$(CONFIG_VIDEO_VEYEMVCAM) += veye_mvcam.o
 
 obj-$(CONFIG_VIDEO_OTP_EEPROM)	+= otp_eeprom.o
 obj-$(CONFIG_VIDEO_PREISP_DUMMY_SENSOR) += preisp-dummy.o

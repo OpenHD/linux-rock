@@ -711,6 +711,12 @@
 	};
 };
 
+&uart2 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart2m0_xfer>;
+};
+
 &pinctrl {
 	pmic {
 		pmic_int: pmic_int {

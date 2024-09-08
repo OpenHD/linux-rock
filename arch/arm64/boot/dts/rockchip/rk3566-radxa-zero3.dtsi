@@ -557,7 +557,9 @@
 };
 
 &usbdrd_dwc3 {
-	status = "okay";
+	dr_mode = "host";
+    extcon = <&usb2phy0>;
+    status = "okay";
 };
 
 &usbdrd30 {
@@ -577,7 +579,9 @@
 };
 
 &usbdrd_dwc3 {
-	status = "okay";
+	dr_mode = "host";
+    extcon = <&usb2phy0>;
+    status = "okay";
 };
 
 &vdpu {
@@ -608,7 +612,7 @@
 
 &i2c3 {
 	status = "okay";
-	pinctrl-0 = <&i2c3m1_xfer>;
+	pinctrl-0 = <&i2c3m0_xfer>;
 
 	usbc0: fusb302@22 {
 		compatible = "fcs,fusb302";

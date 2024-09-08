@@ -5375,7 +5375,11 @@ rockchip_atomic_helper_update_plane(struct drm_plane *plane,
 	if (plane == crtc->cursor || vpstate->async_commit)
 		state->legacy_cursor_update = true;
 
+	// Consti10
+	state->legacy_cursor_update = true;
+	//ret = drm_atomic_nonblocking_commit(state);
 	ret = drm_atomic_commit(state);
+	ret=0;
 fail:
 	drm_atomic_state_put(state);
 	return ret;
@@ -9725,6 +9729,7 @@ static void vop2_crtc_atomic_flush(struct drm_crtc *crtc, struct drm_crtc_state 
 	 * signalling flip completion we need to wait for it to finish.
 	 */
 	vop2_wait_for_irq_handler(crtc);
+
 
 	/**
 	 * move here is to make sure current fs call function is complete,

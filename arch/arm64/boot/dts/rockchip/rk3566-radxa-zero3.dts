@@ -537,6 +537,12 @@
 	};
 };
 
+&uart2 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart2m0_xfer>;
+};
+
 &gmac1 {
 	phy-mode = "rgmii";
 	clock_in_out = "output";
@@ -675,7 +681,7 @@
 
 &i2c3 {
 	status = "okay";
-	pinctrl-0 = <&i2c3m1_xfer>;
+	pinctrl-0 = <&i2c3m0_xfer>;
 
 	usbc0: fusb302@22 {
 		compatible = "fcs,fusb302";

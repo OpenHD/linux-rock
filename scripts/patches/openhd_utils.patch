@@ -46,7 +46,7 @@ index bdb1bcd..2b5dd86 100644
 +            patch -p1 -i scripts/patches/openhd_uart.patch
 +            patch -p1 -i scripts/patches/openhd_i2c.patch
 +            patch -p1 -i scripts/patches/openhd_add_veye.patch
-+            patch -p1 -i scripts/patches/openhd_cam.patch
++            #patch -p1 -i scripts/patches/openhd_cam.patch
 +            echo "________OpenHD END_________"
          fi
  

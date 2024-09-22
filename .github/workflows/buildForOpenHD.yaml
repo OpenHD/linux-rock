@@ -48,7 +48,7 @@ jobs:
           cp -r /home/runner/work/linux-rock/linux-rock/bsp/*.deb /home/runner/work/linux-rock/linux-rock/
 
       - name: Upload to Github
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: "rock5-kernel-openhd"
           path: |

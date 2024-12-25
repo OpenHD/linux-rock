@@ -1,0 +1,41 @@
+commit dc3a4b6c4d64a0df8ae4d89ec53ff7dd2bb0728a
+Author: Raphael <68374617+raphaelscholle@users.noreply.github.com>
+Date:   Wed Dec 25 22:18:24 2024 +0100
+
+    wifi
+
+diff --git a/drivers/net/wireless/realtek/Kconfig b/drivers/net/wireless/realtek/Kconfig
+index 474843277fa1..0973841c57bf 100644
+--- a/drivers/net/wireless/realtek/Kconfig
++++ b/drivers/net/wireless/realtek/Kconfig
+@@ -14,7 +14,11 @@ if WLAN_VENDOR_REALTEK
+ 
+ source "drivers/net/wireless/realtek/rtl818x/Kconfig"
+ source "drivers/net/wireless/realtek/rtlwifi/Kconfig"
+-source "drivers/net/wireless/realtek/rtl8xxxu/Kconfig"
+-source "drivers/net/wireless/realtek/rtw88/Kconfig"
++source "drivers/net/wireless/realtek/rtl8812au/Kconfig"
++source "drivers/net/wireless/realtek/rtl88x2bu/Kconfig"
++source "drivers/net/wireless/realtek/rtl88x2eu/Kconfig"
++
++# source "drivers/net/wireless/realtek/rtl8xxxu/Kconfig"
++# source "drivers/net/wireless/realtek/rtw88/Kconfig"
+ 
+ endif # WLAN_VENDOR_REALTEK
+diff --git a/drivers/net/wireless/realtek/Makefile b/drivers/net/wireless/realtek/Makefile
+index 888b5d594e79..e727c17b6f0a 100644
+--- a/drivers/net/wireless/realtek/Makefile
++++ b/drivers/net/wireless/realtek/Makefile
+@@ -6,6 +6,10 @@
+ obj-$(CONFIG_RTL8180)		+= rtl818x/
+ obj-$(CONFIG_RTL8187)		+= rtl818x/
+ obj-$(CONFIG_RTLWIFI)		+= rtlwifi/
+-obj-$(CONFIG_RTL8XXXU)		+= rtl8xxxu/
+-obj-$(CONFIG_RTW88)		+= rtw88/
++obj-m += rtl8812au/
++obj-m += rtl88x2bu/
++obj-m += rtl88x2eu/
++
++# obj-$(CONFIG_RTL8XXXU)		+= rtl8xxxu/
++# obj-$(CONFIG_RTW88)		+= rtw88/
+ 

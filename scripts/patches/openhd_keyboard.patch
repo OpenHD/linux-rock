@@ -118,22 +118,22 @@ index e11ba6772..cb42385aa 100644
 +		pinctrl-0 = <&pwr_key>;
 +		autorepeat;
 +		up-key {
-+			gpios = <&gpio3 RK_PC1 GPIO_ACTIVE_LOW>;
++			gpios = <&gpio3 RK_PA5 GPIO_ACTIVE_LOW>;
 +			linux,code = <103>;
 +			label = "key up";
 +		};
 +		down-key {
-+			gpios = <&gpio4 RK_PC6 GPIO_ACTIVE_LOW>;
++			gpios = <&gpio3 RK_PA6 GPIO_ACTIVE_LOW>;
 +			linux,code = <108>;
 +			label = "key down";
 +		};
 +		left-key {
-+			gpios = <&gpio4 RK_PB3 GPIO_ACTIVE_LOW>;
++			gpios = <&gpio1 RK_PA4 GPIO_ACTIVE_LOW>;
 +			linux,code = <105>;
 +			label = "key left";
 +		};
 +		right-key {
-+			gpios = <&gpio3 RK_PC2 GPIO_ACTIVE_LOW>;
++			gpios = <&gpio3 RK_PA4 GPIO_ACTIVE_LOW>;
 +			linux,code = <106>;
 +			label = "key right";
 +		};
@@ -143,12 +143,12 @@ index e11ba6772..cb42385aa 100644
 +			label = "key enter";
 +		};
 +		back-key {
-+			gpios = <&gpio3 RK_PA6 GPIO_ACTIVE_LOW>;
++			gpios = <&gpio4 RK_PC2 GPIO_ACTIVE_LOW>;
 +			linux,code = <14>;
 +			label = "key back";
 +		};
 +		reset-key {
-+			gpios = <&gpio3 RK_PA5 GPIO_ACTIVE_LOW>;
++			gpios = <&gpio3 RK_PC1 GPIO_ACTIVE_LOW>;
 +			linux,code = <111>;
 +			label = "key reset";
 +		};
@@ -164,13 +164,13 @@ index e11ba6772..cb42385aa 100644
 +	keys {
 +		pwr_key: pwr-key {
 +			rockchip,pins =
-+				<3 RK_PC1 RK_FUNC_GPIO &pcfg_pull_up>,
-+				<4 RK_PB3 RK_FUNC_GPIO &pcfg_pull_up>,
-+				<3 RK_PA7 RK_FUNC_GPIO &pcfg_pull_up>,
-+				<3 RK_PA6 RK_FUNC_GPIO &pcfg_pull_up>,
 +				<3 RK_PA5 RK_FUNC_GPIO &pcfg_pull_up>,
-+				<3 RK_PC2 RK_FUNC_GPIO &pcfg_pull_up>,
-+				<4 RK_PC6 RK_FUNC_GPIO &pcfg_pull_up>;
++				<3 RK_PA6 RK_FUNC_GPIO &pcfg_pull_up>,
++				<1 RK_PA4 RK_FUNC_GPIO &pcfg_pull_up>,
++				<3 RK_PA4 RK_FUNC_GPIO &pcfg_pull_up>,
++				<3 RK_PA7 RK_FUNC_GPIO &pcfg_pull_up>,
++				<4 RK_PC2 RK_FUNC_GPIO &pcfg_pull_up>,
++				<3 RK_PC1 RK_FUNC_GPIO &pcfg_pull_up>;
 +		};
 +	};
 +
@@ -433,22 +433,22 @@ index 0abc6e60db50..adce697c8c45 100644
 +		 pinctrl-0 = <&pwr_key>;
 +		 autorepeat;
 +		 up-key {
-+			 gpios = <&gpio3 RK_PC1 GPIO_ACTIVE_LOW>;
++			 gpios = <&gpio3 RK_PA5 GPIO_ACTIVE_LOW>;
 +			 linux,code = <103>;
 +			 label = "key up";
 +		 };
 +		 down-key {
-+			 gpios = <&gpio4 RK_PC6 GPIO_ACTIVE_LOW>;
++			 gpios = <&gpio3 RK_PA6 GPIO_ACTIVE_LOW>;
 +			 linux,code = <108>;
 +			 label = "key down";
 +		 };
 +		 left-key {
-+			 gpios = <&gpio4 RK_PB3 GPIO_ACTIVE_LOW>;
++			 gpios = <&gpio1 RK_PA4 GPIO_ACTIVE_LOW>;
 +			 linux,code = <105>;
 +			 label = "key left";
 +		 };
 +		 right-key {
-+			 gpios = <&gpio3 RK_PC2 GPIO_ACTIVE_LOW>;
++			 gpios = <&gpio3 RK_PA4 GPIO_ACTIVE_LOW>;
 +			 linux,code = <106>;
 +			 label = "key right";
 +		 };
@@ -458,12 +458,12 @@ index 0abc6e60db50..adce697c8c45 100644
 +			 label = "key enter";
 +		 };
 +		 back-key {
-+			 gpios = <&gpio3 RK_PA6 GPIO_ACTIVE_LOW>;
++			 gpios = <&gpio4 RK_PC2 GPIO_ACTIVE_LOW>;
 +			 linux,code = <14>;
 +			 label = "key back";
 +		 };
 +		 reset-key {
-+			 gpios = <&gpio3 RK_PA5 GPIO_ACTIVE_LOW>;
++			 gpios = <&gpio3 RK_PC1 GPIO_ACTIVE_LOW>;
 +			 linux,code = <111>;
 +			 label = "key reset";
 +		 };
@@ -1282,13 +1282,13 @@ index 0abc6e60db50..adce697c8c45 100644
 +	 keys {
 +		 pwr_key: pwr-key {
 +			 rockchip,pins =
-+				 <3 RK_PC1 RK_FUNC_GPIO &pcfg_pull_up>,
-+				 <4 RK_PB3 RK_FUNC_GPIO &pcfg_pull_up>,
-+				 <3 RK_PA7 RK_FUNC_GPIO &pcfg_pull_up>,
-+				 <3 RK_PA6 RK_FUNC_GPIO &pcfg_pull_up>,
 +				 <3 RK_PA5 RK_FUNC_GPIO &pcfg_pull_up>,
-+				 <3 RK_PC2 RK_FUNC_GPIO &pcfg_pull_up>,
-+				 <4 RK_PC6 RK_FUNC_GPIO &pcfg_pull_up>;
++				 <3 RK_PA6 RK_FUNC_GPIO &pcfg_pull_up>,
++				 <1 RK_PA4 RK_FUNC_GPIO &pcfg_pull_up>,
++				 <3 RK_PA4 RK_FUNC_GPIO &pcfg_pull_up>,
++				 <3 RK_PA7 RK_FUNC_GPIO &pcfg_pull_up>,
++				 <4 RK_PC2 RK_FUNC_GPIO &pcfg_pull_up>,
++				 <3 RK_PC1 RK_FUNC_GPIO &pcfg_pull_up>;
 +		 };
 +	 };
 + 

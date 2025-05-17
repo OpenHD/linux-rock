@@ -30,27 +30,27 @@ Date:   Sat Mar 16 00:58:37 2024 +0100
 # +		};
 # +		left-key {
 # +			gpios = <&gpio4 RK_PB3 GPIO_ACTIVE_LOW>;
-# +			linux,code = <106>;
+# +			linux,code = <105>;
 # +			label = "key left";
 # +		};
 # +		right-key {
 # +			gpios = <&gpio3 RK_PC2 GPIO_ACTIVE_LOW>;
-# +			linux,code = <107>;
+# +			linux,code = <106>;
 # +			label = "key right";
 # +		};
 # +		enter-key {
 # +			gpios = <&gpio3 RK_PA7 GPIO_ACTIVE_LOW>;
-# +			linux,code = <29>;
+# +			linux,code = <28>;
 # +			label = "key enter";
 # +		};
 # +		back-key {
 # +			gpios = <&gpio3 RK_PA6 GPIO_ACTIVE_LOW>;
-# +			linux,code = <159>;
+# +			linux,code = <14>;
 # +			label = "key back";
 # +		};
 # +		reset-key {
 # +			gpios = <&gpio3 RK_PA5 GPIO_ACTIVE_LOW>;
-# +			linux,code = <2>;
+# +			linux,code = <111>;
 # +			label = "key reset";
 # +		};
 # +	};
@@ -129,27 +129,27 @@ index e11ba6772..cb42385aa 100644
 +		};
 +		left-key {
 +			gpios = <&gpio4 RK_PB3 GPIO_ACTIVE_LOW>;
-+			linux,code = <106>;
++			linux,code = <105>;
 +			label = "key left";
 +		};
 +		right-key {
 +			gpios = <&gpio3 RK_PC2 GPIO_ACTIVE_LOW>;
-+			linux,code = <107>;
++			linux,code = <106>;
 +			label = "key right";
 +		};
 +		enter-key {
 +			gpios = <&gpio3 RK_PA7 GPIO_ACTIVE_LOW>;
-+			linux,code = <29>;
++			linux,code = <28>;
 +			label = "key enter";
 +		};
 +		back-key {
 +			gpios = <&gpio3 RK_PA6 GPIO_ACTIVE_LOW>;
-+			linux,code = <159>;
++			linux,code = <14>;
 +			label = "key back";
 +		};
 +		reset-key {
 +			gpios = <&gpio3 RK_PA5 GPIO_ACTIVE_LOW>;
-+			linux,code = <2>;
++			linux,code = <111>;
 +			label = "key reset";
 +		};
 +	};
@@ -444,27 +444,27 @@ index 0abc6e60db50..adce697c8c45 100644
 +		 };
 +		 left-key {
 +			 gpios = <&gpio4 RK_PB3 GPIO_ACTIVE_LOW>;
-+			 linux,code = <106>;
++			 linux,code = <105>;
 +			 label = "key left";
 +		 };
 +		 right-key {
 +			 gpios = <&gpio3 RK_PC2 GPIO_ACTIVE_LOW>;
-+			 linux,code = <107>;
++			 linux,code = <106>;
 +			 label = "key right";
 +		 };
 +		 enter-key {
 +			 gpios = <&gpio3 RK_PA7 GPIO_ACTIVE_LOW>;
-+			 linux,code = <29>;
++			 linux,code = <28>;
 +			 label = "key enter";
 +		 };
 +		 back-key {
 +			 gpios = <&gpio3 RK_PA6 GPIO_ACTIVE_LOW>;
-+			 linux,code = <159>;
++			 linux,code = <14>;
 +			 label = "key back";
 +		 };
 +		 reset-key {
 +			 gpios = <&gpio3 RK_PA5 GPIO_ACTIVE_LOW>;
-+			 linux,code = <2>;
++			 linux,code = <111>;
 +			 label = "key reset";
 +		 };
 +	 };
